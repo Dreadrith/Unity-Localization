@@ -1,11 +1,9 @@
 {
   "name": "com.dreadscripts.localization",
-  "displayName": "DreadTools - Localization",
+  "displayName": "DreadScripts - Localization",
   "version": "1.0.0",
-  "description": "",
   "gitDependencies": {},
-  "vpmDependencies": {
-  },
+  "vpmDependencies": {},
   "author": {
     "name": "Dreadrith",
     "email": "dreadscripts@gmail.com",
@@ -13,5 +11,5 @@
   },
   "legacyFolders": {},
   "legacyFiles": {},
-  "type": "tool"
+  "type": "library"
 }
