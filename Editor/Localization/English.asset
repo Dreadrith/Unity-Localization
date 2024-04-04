@@ -101,7 +101,7 @@ MonoBehaviour:
       tooltip: 
   - keyName: ExtrasFoldout
     content:
-      text: Editor Options
+      text: Editor Utility
       tooltip: 
   - keyName: ShowIconToggle
     content:
@@ -117,3 +117,23 @@ MonoBehaviour:
 
         You can
         choose a language to compare with for easier translation.'
+  - keyName: Copy
+    content:
+      text: Copy
+      tooltip: 
+  - keyName: Paste
+    content:
+      text: Paste
+      tooltip: 
+  - keyName: LineParseFailLog
+    content:
+      text: Line {0} couldn't be parsed and was skipped.
+      tooltip: 
+  - keyName: KeyNotFoundLog
+    content:
+      text: Key {0} does not exist in any key collection and was skipped.
+      tooltip: 
+  - keyName: CSVPasteFinishLog
+    content:
+      text: Finished pasting to Localization file.
+      tooltip: 
