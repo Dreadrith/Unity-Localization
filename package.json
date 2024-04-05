@@ -11,5 +11,7 @@
   },
   "legacyFolders": {},
   "legacyFiles": {},
-  "type": "library"
+  "type": "library",
+  "description": "A library to make localization for Unity scripts easier.",
+  "unity": "2019.4"
 }
