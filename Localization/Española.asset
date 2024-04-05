@@ -1,0 +1,146 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a74cd046faed01940be558b7203051dc, type: 3}
+  m_Name: "Espa\xF1ola"
+  m_EditorClassIdentifier: 
+  languageName: "Espa\xF1ola"
+  localizedContent:
+  - keyName: EditorLanguageSelectionField
+    content:
+      text: Idioma del Editor
+      tooltip: "Idioma del editor de localizaci\xF3n."
+  - keyName: LanguageNameField
+    content:
+      text: Nombre del Idioma
+      tooltip: "Nombre del idioma. Esto es lo que aparece en el men\xFA desplegable
+        de idiomas."
+  - keyName: SearchField
+    content:
+      text: Buscar
+      tooltip: Filtra las claves para solo aquellas que contienen este texto.
+  - keyName: HowToUseFoldout
+    content:
+      text: "\xBFC\xF3mo Usar?"
+      tooltip: 
+  - keyName: ShowKeyNameToggle
+    content:
+      text: Mostrar Nombres de Claves
+      tooltip: Para la columna de Nombre de Clave.
+  - keyName: ShowComparisonToggle
+    content:
+      text: "Mostrar Comparaci\xF3n"
+      tooltip: "Compara con otro idioma para facilitar la traducci\xF3n."
+  - keyName: ShowDisplayToggle
+    content:
+      text: "Mostrar Visualizaci\xF3n Final"
+      tooltip: "Esto muestra c\xF3mo se ver\xE1 el contenido en los editores."
+  - keyName: HowToUse
+    content:
+      text: "Este es un archivo de traducci\xF3n para el script asociado.\nPuedes
+        escribir tu traducci\xF3n en la columna 'Traducci\xF3n'.\nPuedes elegir un
+        idioma para comparar y facilitar la traducci\xF3n."
+      tooltip: 
+  - keyName: ComparisonField
+    content:
+      text: "Idioma de Comparaci\xF3n"
+      tooltip: 
+  - keyName: KeyNameTitle
+    content:
+      text: Nombres
+      tooltip: 
+  - keyName: TranslationTitle
+    content:
+      text: "Traducci\xF3n"
+      tooltip: 
+  - keyName: ComparisonTitle
+    content:
+      text: "Comparaci\xF3n"
+      tooltip: 
+  - keyName: DisplayTitle
+    content:
+      text: "Visualizaci\xF3n Final"
+      tooltip: 
+  - keyName: TranslationTextField
+    content:
+      text: texto
+      tooltip: 
+  - keyName: TranslationTooltipField
+    content:
+      text: "informaci\xF3n sobre herramientas"
+      tooltip: 
+  - keyName: TranslationIconField
+    content:
+      text: icono
+      tooltip: 
+  - keyName: BaseLocalizationTitle
+    content:
+      text: "Localizaci\xF3n"
+      tooltip: 
+  - keyName: BaseLocalizationSelectionHelp
+    content:
+      text: "Selecciona para qu\xE9 quieres hacer una traducci\xF3n.\nSi no ves tu
+        clase aqu\xED, aseg\xFArate de que herede de 'LocalizationScriptableBase'."
+      tooltip: 
+  - keyName: BaseLocalizationSelectionField
+    content:
+      text: Clase a Traducir
+      tooltip: 
+  - keyName: ExtrasFoldout
+    content:
+      text: Utilidad del Editor
+      tooltip: 
+  - keyName: ShowIconToggle
+    content:
+      text: Mostrar Campo de Icono
+      tooltip: "Este icono se carga a trav\xE9s de EditorGUIUtility.IconContent"
+  - keyName: HelpIcon
+    content:
+      text: 
+      tooltip: "Este es un archivo de traducci\xF3n para el script asociado.\nPuedes
+        escribir tu traducci\xF3n en la columna 'Traducci\xF3n'.\nPuedes elegir un
+        idioma para comparar y facilitar la traducci\xF3n."
+  - keyName: Copy
+    content:
+      text: Copy
+      tooltip: 
+  - keyName: Paste
+    content:
+      text: Paste
+      tooltip: 
+  - keyName: LineParseFailLog
+    content:
+      text: Line {0} couldn't be parsed and was skipped.
+      tooltip: 
+  - keyName: KeyNotFoundLog
+    content:
+      text: Key {0} does not exist in any key collection and was skipped.
+      tooltip: 
+  - keyName: CSVPasteFinishLog
+    content:
+      text: Finished pasting to Localization file.
+      tooltip: 
+  - keyName: CopyCategory
+    content:
+      text: Copy Category As CSV
+      tooltip: 
+  - keyName: PasteCategory
+    content:
+      text: Paste Category As CSV
+      tooltip: 
+  - keyName: CopyAll
+    content:
+      text: Copy All As CSV
+      tooltip: 
+  - keyName: PasteAll
+    content:
+      text: Paste All As CSV
+      tooltip: 
