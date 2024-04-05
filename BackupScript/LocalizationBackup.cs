@@ -1,4 +1,4 @@
-﻿#if !LOCALIZATION_FOUND
+﻿#if !DREADSCRIPTS_LOCALIZATION
 using System;
 using System.Collections.Generic;
 using System.Linq;
