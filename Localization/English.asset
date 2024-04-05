@@ -137,3 +137,19 @@ MonoBehaviour:
     content:
       text: Finished pasting to Localization file.
       tooltip: 
+  - keyName: CopyCategory
+    content:
+      text: Copy Category As CSV
+      tooltip: 
+  - keyName: PasteCategory
+    content:
+      text: Paste Category As CSV
+      tooltip: 
+  - keyName: CopyAll
+    content:
+      text: Copy All As CSV
+      tooltip: 
+  - keyName: PasteAll
+    content:
+      text: Paste All As CSV
+      tooltip: 
