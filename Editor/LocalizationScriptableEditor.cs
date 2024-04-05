@@ -33,7 +33,6 @@ namespace DreadScripts.Localization
         private static bool showKeyNameColumn = true;
         private static bool showComparisonColumn = true;
         private static bool showDisplayColumn;
-        //private static bool showIconField;
 
         private LocalizationKeyCategory[] keyCollections;
 
@@ -83,65 +82,24 @@ namespace DreadScripts.Localization
                     using (new GUILayout.HorizontalScope())
                     {
                         GUILayout.Space(20);
-                        if (GUILayout.Button($"{Localize(LocalizationLocalizationKeys.Copy).text} CSV", EditorStyles.toolbarButton))
-                        {
-                            StringBuilder builder = new StringBuilder();
-                            foreach (var lc in targetScriptable.localizedContent)
-                            {
-                                var mc = lc.content;
-                                if (mc == null) continue;
-                                builder.AppendLine($"{EscapeAndQuote(lc.keyName)},{EscapeAndQuote(mc.text)},{EscapeAndQuote(mc.tooltip)}");
-                            }
-
-                            EditorGUIUtility.systemCopyBuffer = builder.ToString();
-                        }
-
-                        if (GUILayout.Button($"{Localize(LocalizationLocalizationKeys.Paste).text} CSV", EditorStyles.toolbarButton))
-                        {
-                            Undo.RecordObject(targetScriptable, "Paste Localization CSV");
-                            var lines = EditorGUIUtility.systemCopyBuffer.Split('\n');
-                            string parsePattern = @"("".*""),("".*""),("".*"")";
-                            for (int i = 0; i < lines.Length; i++)
-                            {
-                                var l = lines[i];
-                                if (string.IsNullOrWhiteSpace(l)) continue;
-                                Match m = Regex.Match(l, parsePattern);
-                                if (!m.Success)
-                                {
-                                    //"Line {0} couldn't be parsed and was skipped"
-                                    Debug.LogError(string.Format(Localize(LocalizationLocalizationKeys.LineParseFailLog).text, i));
-                                    continue;
-                                }
-
-                                var key = UnquoteAndUnescape(m.Groups[1].Value);
-                                var text = UnquoteAndUnescape(m.Groups[2].Value);
-                                var tooltip = UnquoteAndUnescape(m.Groups[3].Value);
-
-                                var lc = targetScriptable.localizedContent.FirstOrDefault(c => c.keyName == key);
-                                if (lc == null)
-                                {
-                                    if (!targetScriptable.LocalizationKeyCollections.Any(kc => kc.keyNames.Any(k => k == key)))
-                                    {
-                                        Debug.LogError(string.Format(Localize(LocalizationLocalizationKeys.KeyNotFoundLog).text, key));
-                                        continue;
-                                    }
-
-                                    lc = new LocalizedContent(key, new MiniContent(string.Empty));
-                                    targetScriptable.localizedContent = targetScriptable.localizedContent.Append(lc).ToArray();
-                                }
-
-                                lc.content.text = text;
-                                lc.content.tooltip = tooltip;
-                            }
-
-                            EditorUtility.SetDirty(targetScriptable);
-
-                            //Finished pasting to Localization file.
-                            Debug.Log($"[Localization] {Localize(LocalizationLocalizationKeys.CSVPasteFinishLog).text}");
-                            RefreshKeyMatches();
-                            Repaint();
-                        }
+                        if (GUILayout.Button(Localize(LocalizationLocalizationKeys.CopyCategory), EditorStyles.toolbarButton))
+                            CopyAsCSV(true);
+                        
+                        if (GUILayout.Button(Localize(LocalizationLocalizationKeys.PasteCategory), EditorStyles.toolbarButton))
+                            PasteAsCSV(true);
                     }
+                    
+                    using (new GUILayout.HorizontalScope())
+                    {
+                        GUILayout.Space(20);
+                        if (GUILayout.Button(Localize(LocalizationLocalizationKeys.CopyAll), EditorStyles.toolbarButton))
+                            CopyAsCSV(false);
+                        
+                        if (GUILayout.Button(Localize(LocalizationLocalizationKeys.PasteAll), EditorStyles.toolbarButton))
+                            PasteAsCSV(false);
+                    }
+                    
+                    EditorGUILayout.Space();
 
                     using (new GUILayout.HorizontalScope())
                     {
@@ -317,11 +275,7 @@ namespace DreadScripts.Localization
             {
                 textFieldRect.y += EditorGUIUtility.singleLineHeight;
                 GUI.Label(textFieldRect, km.comparisonContent.tooltip);
-                /*if (showIconField)
-                {
-                    textFieldRect.y += EditorGUIUtility.singleLineHeight;
-                    GUI.Label(textFieldRect, km.comparisonContent.iconName);
-                }*/
+
             }
         }
 
@@ -352,24 +306,15 @@ namespace DreadScripts.Localization
                 EditorGUI.BeginChangeCheck();
                 string text = miniContent.text;
                 string tooltip = miniContent.tooltip;
-                //string iconName = miniContent.iconName;
                 
                 text = UnescapeNewLines(EditorGUI.DelayedTextField(textFieldRect, EscapeNewLines(miniContent.text)));
                 if (km.foldout)
                 {
                     Rect tooltipRect = new Rect(textFieldRect) {y = textFieldRect.y + EditorGUIUtility.singleLineHeight};
-                    Rect iconRect = new Rect(tooltipRect) {y = tooltipRect.y + EditorGUIUtility.singleLineHeight};
-
                     tooltip = UnescapeNewLines(EditorGUI.DelayedTextField(tooltipRect, EscapeNewLines(miniContent.tooltip)));
-
-                    //if (showIconField)
-                    //    iconName = UnescapeNewLines(EditorGUI.DelayedTextField(iconRect, EscapeNewLines(miniContent.iconName)));
                     
                     GUI.Label(textFieldRect, Localize(LocalizationLocalizationKeys.TranslationTextField), Styles.fadedLabel);
                     GUI.Label(tooltipRect, Localize(LocalizationLocalizationKeys.TranslationTooltipField),Styles.fadedLabel);
-                    
-                    /*if (showIconField)
-                        GUI.Label(iconRect, Localize(LocalizationLocalizationKeys.TranslationIconField), Styles.fadedLabel);*/
                 }
                 
                 if (EditorGUI.EndChangeCheck())
@@ -377,7 +322,6 @@ namespace DreadScripts.Localization
                     Undo.RecordObject(targetScriptable, "Translation Change");
                     miniContent.text = text;
                     miniContent.tooltip = tooltip;
-                    //miniContent.iconName = iconName;
                     EditorUtility.SetDirty(targetScriptable);
                 }
             }
@@ -471,6 +415,71 @@ namespace DreadScripts.Localization
             return ICContains(text, search) || ICContains(tooltip, search) /*|| ICContains(iconName, search)*/;
         }
 
+        private void CopyAsCSV(bool categoryOnly)
+        {
+            StringBuilder builder = new StringBuilder();
+            IEnumerable<LocalizedContent> targetContent = targetScriptable.localizedContent; 
+            if (categoryOnly) targetContent = targetContent.Where(lc => keyMatches2D[toolbarIndex].Any(km => km.keyName == lc.keyName));
+            foreach (var lc in targetContent)
+            {
+                var mc = lc.content;
+                if (mc == null) continue;
+                builder.AppendLine($"{EscapeAndQuote(lc.keyName)},{EscapeAndQuote(mc.text)},{EscapeAndQuote(mc.tooltip)}");
+            }
+
+            EditorGUIUtility.systemCopyBuffer = builder.ToString();
+        }
+
+        private void PasteAsCSV(bool categoryOnly)
+        {
+            Undo.RecordObject(targetScriptable, "Paste Localization CSV");
+            var lines = EditorGUIUtility.systemCopyBuffer.Split('\n');
+            string parsePattern = @"("".*""),("".*""),("".*"")";
+            for (int i = 0; i < lines.Length; i++)
+            {
+                var l = lines[i];
+                if (string.IsNullOrWhiteSpace(l)) continue;
+                Match m = Regex.Match(l, parsePattern);
+                if (!m.Success)
+                {
+                    Debug.LogError(string.Format(Localize(LocalizationLocalizationKeys.LineParseFailLog).text, i));
+                    continue;
+                }
+
+                var key = UnquoteAndUnescape(m.Groups[1].Value);
+                var text = UnquoteAndUnescape(m.Groups[2].Value);
+                var tooltip = UnquoteAndUnescape(m.Groups[3].Value);
+
+                IEnumerable<LocalizedContent> targetContent = targetScriptable.localizedContent; 
+                if (categoryOnly) targetContent = targetContent.Where(lc2 => keyMatches2D[toolbarIndex].Any(km => km.keyName == lc2.keyName));
+                var lc = targetContent.FirstOrDefault(c => c.keyName == key);
+                if (lc == null)
+                {
+                    if (
+                        (!categoryOnly && !targetScriptable.LocalizationKeyCollections.Any(kc => kc.keyNames.Any(k => k == key))) ||
+                        (categoryOnly && !targetScriptable.LocalizationKeyCollections[toolbarIndex].keyNames.Any(k => k == key))
+                        )
+                    {
+                        Debug.LogError(string.Format(Localize(LocalizationLocalizationKeys.KeyNotFoundLog).text, key));
+                        continue;
+                    }
+
+                    lc = new LocalizedContent(key, new MiniContent(string.Empty));
+                    targetScriptable.localizedContent = targetScriptable.localizedContent.Append(lc).ToArray();
+                }
+
+                lc.content.text = text;
+                lc.content.tooltip = tooltip;
+            }
+
+            EditorUtility.SetDirty(targetScriptable);
+
+            //Finished pasting to Localization file.
+            Debug.Log($"[Localization] {Localize(LocalizationLocalizationKeys.CSVPasteFinishLog).text}");
+            RefreshKeyMatches();
+            Repaint();
+        }
+
         private static GUIContent Localize(LocalizationLocalizationKeys value, GUIContent fallbackContent = null, Texture2D icon = null) => localizationLocalizer.Get(value, fallbackContent, icon);
 
         #endregion
@@ -485,8 +494,8 @@ namespace DreadScripts.Localization
         
         private static readonly Type[] dropdownIgnoredTypes =
         {
-            /*typeof(LocalizationScriptablePlaceholder),
-            typeof(LocalizationLocalization)*/
+            typeof(LocalizationScriptablePlaceholder),
+            typeof(LocalizationLocalization)
         };
 
         private static Type[] validLocalizationTypes;
@@ -578,8 +587,10 @@ namespace DreadScripts.Localization
         TranslationIconField,
         ExtrasFoldout,
         HelpIcon,
-        Copy,
-        Paste,
+        CopyCategory,
+        PasteCategory,
+        CopyAll,
+        PasteAll,
         LineParseFailLog,
         KeyNotFoundLog,
         CSVPasteFinishLog
