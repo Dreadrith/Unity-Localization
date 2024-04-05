@@ -192,8 +192,8 @@ namespace [CHANGEME]
 	{
 		public LocalizationKeyCategory(string categoryName, params string[] keyNames)
 		{
-			this.categoryName = categoryName;
-			this.keyNames = keyNames;
+			
+			
 		}
 		
 		public LocalizationKeyCategory(string name, Type type)
