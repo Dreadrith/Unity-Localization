@@ -8,7 +8,7 @@ using System.Linq;
 namespace DreadScripts.Localization
 {
 
-    public class Localization
+    public class LocalizationHandler
     {
         private const string PREFERRED_LANGUAGE_KEY = "DSLocalizationPreferredLanguage";
         private const string LANGUAGE_KEY_PREFIX = "DSLocalizationLanguage";
@@ -24,12 +24,12 @@ namespace DreadScripts.Localization
         private bool shouldRefresh;
         
         #region Instancing
-        public static Localization Load(LocalizationScriptableBase map) => new Localization(map);
-        public static Localization Load<T>(string baseLanguageName = "English") where T : LocalizationScriptableBase => new Localization(typeof(T), baseLanguageName);
-        public static Localization Load(Type type, string baseLanguageName = "English") => new Localization(type, baseLanguageName);
-        public Localization(LocalizationScriptableBase map) => SetLanguage(map);
+        public static LocalizationHandler Load(LocalizationScriptableBase map) => new LocalizationHandler(map);
+        public static LocalizationHandler Load<T>(string baseLanguageName = "English") where T : LocalizationScriptableBase => new LocalizationHandler(typeof(T), baseLanguageName);
+        public static LocalizationHandler Load(Type type, string baseLanguageName = "English") => new LocalizationHandler(type, baseLanguageName);
+        public LocalizationHandler(LocalizationScriptableBase map) => SetLanguage(map);
         
-        public Localization(Type type, string baseLanguageName = "English")
+        public LocalizationHandler(Type type, string baseLanguageName = "English")
         {
             if (!typeof(LocalizationScriptableBase).IsAssignableFrom(type))
                 throw new ArgumentException($"Type {type.Name} doesn't inherit from {nameof(LocalizationScriptableBase)}");
