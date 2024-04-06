@@ -15,11 +15,8 @@ namespace [CHANGEME]
 		[Serializable]
 		internal class LocalizedContent
 		{
-			[SerializeField]
-			public string keyName;
-			[SerializeField]
-			public MiniContent content;
-
+			[SerializeField] public string keyName;
+			[SerializeField] public MiniContent content;
 			internal LocalizedContent(string keyName, MiniContent content)
 			{
 				this.keyName = keyName;
@@ -33,19 +30,16 @@ namespace [CHANGEME]
 	{
 		public string text = "";
 		public string tooltip = "";
-
 		public MiniContent(string text)
 		{
 			this.text = text;
 			tooltip = "";
 		}
-	            
 		public MiniContent(string text, string tooltip)
 		{
 			this.text = text;
 			this.tooltip = tooltip;
 		}
-	        
 		public static implicit operator GUIContent(MiniContent content) => new GUIContent(content.text, content.tooltip);
 	        
 	}
@@ -53,7 +47,6 @@ namespace [CHANGEME]
 
 	public class LocalizationHandler
 	{
-
 	        private static readonly Dictionary<LocalizationScriptableBase, Dictionary<string, int>> mapToLocalizationCache = new Dictionary<LocalizationScriptableBase, Dictionary<string, int>>();
 	        private LocalizationScriptableBase localizationMap;
 	        private Type localizationType;
@@ -187,19 +180,10 @@ namespace [CHANGEME]
 			}
 		}
 	}
-
 	public class KeyCollection
 	{
-		public KeyCollection(string categoryName, params string[] keyNames)
-		{
-			
-			
-		}
-		
-		public KeyCollection(string name, Type type)
-		{
-			
-		}
+		public KeyCollection(string categoryName, params string[] keyNames) { }
+		public KeyCollection(string name, Type type) { }
 	}
 }
 #endif
