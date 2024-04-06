@@ -166,3 +166,7 @@ MonoBehaviour:
     content:
       text: '[Missing Content]'
       tooltip: This content is missing from the localization file.
+  - keyName: PopoutAutoClose
+    content:
+      text: Close when unfocused
+      tooltip: Window will auto-closed when anything else gets focused.

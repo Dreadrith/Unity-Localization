@@ -38,7 +38,8 @@ namespace DreadScripts.Localization
         PasteCategory,
         CopyAll,
         PasteAll,
-        PreferredLanguageMenuItem
+        PreferredLanguageMenuItem,
+        PopoutAutoClose
     }
     
     internal enum LocalizationLogsAndErrorsKeys

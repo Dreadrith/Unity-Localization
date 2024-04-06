@@ -84,10 +84,10 @@ namespace DreadScripts.Localization
 
             DrawSeparator();
 
-            km.targetContent.text = DrawSplit("Text", km.targetContent.text, km.targetContent.text ?? MISSING_COMPARISON_TEXT);
+            km.targetContent.text = DrawSplit(Localize(LocalizationLocalizationKeys.TranslationTextField).text, km.targetContent.text, km.targetContent.text ?? MISSING_COMPARISON_TEXT);
             DrawSeparator();
 
-            km.targetContent.tooltip = DrawSplit("Tooltip", km.targetContent.tooltip, km.targetContent.tooltip ?? MISSING_COMPARISON_TEXT);
+            km.targetContent.tooltip = DrawSplit(Localize(LocalizationLocalizationKeys.TranslationTooltipField).text, km.targetContent.tooltip, km.targetContent.tooltip ?? MISSING_COMPARISON_TEXT);
 
             /*if (showIconField)
             {
@@ -98,7 +98,7 @@ namespace DreadScripts.Localization
             using (new GUILayout.HorizontalScope())
             {
                 using (new GUILayout.VerticalScope(GUI.skin.box))
-                    closeOnUnfocus = EditorGUILayout.Toggle("Close on Unfocus", closeOnUnfocus);
+                    closeOnUnfocus = EditorGUILayout.Toggle(Localize(LocalizationLocalizationKeys.PopoutAutoClose), closeOnUnfocus);
                 /*using (new GUILayout.VerticalScope(GUI.skin.box))
                     showIconField = EditorGUILayout.Toggle("Show Icon Field", showIconField);*/
             }
