@@ -1,8 +1,6 @@
 {
     "name": "com.dreadscripts.localization.backup",
-    "references": [
-        "GUID:f977ed03fc1cb4541975b1862294c182"
-    ],
+    "references": [],
     "includePlatforms": [
         "Editor"
     ],
