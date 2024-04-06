@@ -11,17 +11,20 @@ namespace DreadScripts.Localization
 
     public class LocalizationHandler
     {
-        private const string PREFERRED_LANGUAGE_KEY = "DSLocalizationPreferredLanguage";
+        //This is a prefix preference key for the language of a specific type. 1st in language setting priority.
         private const string LANGUAGE_KEY_PREFIX = "DSLocalizationLanguage";
+        
+        //This is a general preference key for the preferred language. 2nd in language setting priority.
+        private const string PREFERRED_LANGUAGE_KEY = "DSLocalizationPreferredLanguage";
         
         internal static readonly Dictionary<Type, EnumToKeyHandler> typeToKeyHandlers = new Dictionary<Type, EnumToKeyHandler>();
         private static readonly Dictionary<LocalizationScriptableBase, Dictionary<string, int>> mapToLocalizationCache = new Dictionary<LocalizationScriptableBase, Dictionary<string, int>>();
         private LocalizationScriptableBase localizationMap;
         private Type localizationType;
         
-        private LocalizationScriptableBase[] languageOptions;
-        private string[] languageOptionsNames;
-        private int selectedLanguageIndex;
+        public LocalizationScriptableBase[] languageOptions;
+        public string[] languageOptionsNames;
+        public int selectedLanguageIndex;
         private bool shouldRefresh;
         
         #region Instancing
@@ -35,10 +38,16 @@ namespace DreadScripts.Localization
             if (!typeof(LocalizationScriptableBase).IsAssignableFrom(type))
                 throw new ArgumentException($"Type {type.Name} doesn't inherit from {nameof(LocalizationScriptableBase)}");
             
+            // This works but is slow.
+            // var allLanguages = AssetDatabase.FindAssets($"t:{type.Name}").Select(AssetDatabase.GUIDToAssetPath).Select(AssetDatabase.LoadAssetAtPath<LocalizationScriptableBase>).Where(so => so != null && so.GetType() == type).ToArray();
+            
+            //This is faster but Resource may not be loaded yet if it's in Packages
             var allLanguages = Resources.FindObjectsOfTypeAll(type) as LocalizationScriptableBase[];
             
             if (allLanguages == null || allLanguages.Length == 0)
             {
+                //Best of both worlds solution
+                //If the resources aren't loaded, do a concentrated search in the package of the type's script and load them.
                 try
                 {
                     var tempInstance = ScriptableObject.CreateInstance(type);
@@ -80,8 +89,6 @@ namespace DreadScripts.Localization
             if (map == null) map = allLanguages.First();
             SetLanguage(map);
         }
-
-        
         #endregion
 
         #region Get with KeyName
@@ -134,16 +141,17 @@ namespace DreadScripts.Localization
 
             return localizedContent[index].content;
         }
-
-
-        private void SetLanguage(LocalizationScriptableBase map)
+        
+        public void SetLanguage(LocalizationScriptableBase map)
         {
             localizationMap = map;
             localizationType = map != null ? map.GetType() : null;
             RefreshLanguages();
             if (map != null) selectedLanguageIndex = Array.FindIndex(languageOptions, l => l == map);
         }
-        private void RefreshLanguages()
+
+        ///<summary>Refreshes the options for the language selection dropdown</summary>
+        public void RefreshLanguages()
         {
             if (localizationType == null)
             {
@@ -157,13 +165,19 @@ namespace DreadScripts.Localization
             shouldRefresh = false;
         }
 
+        ///<summary>Draws the language selection field.</summary>
+        /// <param name="keyName">The key to use for localizing the label of the dropdown. Falls back to 'Language' if not found.</param>
+        /// <param name="onChange">Action to call on language change.</param>
         public void DrawField(string keyName = "LanguageSelectionField", Action onChange = null)
         {
             if (!TryGet(keyName, out var content))
                 content = LocalizationHelper.TempContent("Language");
-            DrawField(content);
+            DrawField(content, onChange);
         }
-
+        
+        ///<summary>Draws the language selection field.</summary>
+        /// <param name="content">The content to use for the label of the dropdown.</param>
+        /// <param name="onChange">Action to call on language change.</param>
         public void DrawField(GUIContent content, Action onChange = null)
         {
             EditorGUI.BeginChangeCheck();
@@ -177,6 +191,7 @@ namespace DreadScripts.Localization
                 onChange?.Invoke();
             }
       
+            //Refresh the languages when the dropdown for languages gets hovered over.
             if (LocalizationHelper.OnHoverEnter(GUILayoutUtility.GetLastRect(), ref shouldRefresh))
                 RefreshLanguages();
         }
