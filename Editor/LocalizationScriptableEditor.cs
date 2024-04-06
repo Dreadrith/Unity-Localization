@@ -59,7 +59,6 @@ namespace DreadScripts.Localization
 
         public override void OnInspectorGUI()
         {
-            GUILayout.Label(localizationLocalizationHandler["Wawa"]);
             using (new GUILayout.HorizontalScope("in bigtitle"))
             {
                 GUILayout.FlexibleSpace();
