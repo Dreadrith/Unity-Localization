@@ -9,10 +9,10 @@ namespace DreadScripts.Localization
     public class LocalizationLocalization : LocalizationScriptableBase
     {
         public override string hostTitle { get; } = "Localization Localization";
-        public override LocalizationKeyCategory[] LocalizationKeyCollections { get; } =
+        public override KeyCollection[] keyCollections { get; } =
         {
-            new LocalizationKeyCategory("Main", typeof(LocalizationLocalizationKeys)),
-            new LocalizationKeyCategory("Placeholder", typeof(LocalizationPlaceholderKeys))
+            new KeyCollection("Main", typeof(LocalizationLocalizationKeys)),
+            new KeyCollection("Placeholder", typeof(LocalizationPlaceholderKeys))
         };
     }
 }

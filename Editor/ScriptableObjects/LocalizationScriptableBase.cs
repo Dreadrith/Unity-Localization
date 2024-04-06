@@ -11,7 +11,7 @@ namespace DreadScripts.Localization
     public abstract class LocalizationScriptableBase : ScriptableObject
     {
         public abstract string hostTitle { get; }
-        public abstract LocalizationKeyCategory[] LocalizationKeyCollections{ get; }
+        public abstract KeyCollection[] keyCollections{ get; }
 
         [SerializeField] public string languageName = "";
         [SerializeField] internal LocalizedContent[] localizedContent = Array.Empty<LocalizedContent>();
@@ -19,7 +19,7 @@ namespace DreadScripts.Localization
         public void PopulateContent(bool canUndo = true)
         {
             if (canUndo) Undo.RecordObject(this, "Populate Localization");
-            var keys = LocalizationKeyCollections.SelectMany(kc => kc.keyNames).ToArray();
+            var keys = keyCollections.SelectMany(kc => kc.keyNames).ToArray();
             foreach(var k in keys.Except(localizedContent.Select(lc => lc.keyName)))
                 localizedContent = localizedContent.Append(new LocalizedContent(k, new MiniContent("Untranslated Text"))).ToArray();
             EditorUtility.SetDirty(this);
@@ -90,19 +90,19 @@ namespace DreadScripts.Localization
         
     }
 
-    public struct LocalizationKeyCategory
+    public struct KeyCollection
     {
-        public string categoryName;
+        public string collectionName;
         public string[] keyNames;
-        public LocalizationKeyCategory(string categoryName, params string[] keyNames)
+        public KeyCollection(string collectionName, params string[] keyNames)
         {
-            this.categoryName = categoryName;
+            this.collectionName = collectionName;
             this.keyNames = keyNames;
         }
         
-        public LocalizationKeyCategory(string categoryName, Type enumType)
+        public KeyCollection(string collectionName, Type enumType)
         {
-            this.categoryName = categoryName;
+            this.collectionName = collectionName;
             keyNames = Enum.GetNames(enumType);
         }
     }

@@ -34,7 +34,7 @@ namespace DreadScripts.Localization
         private static bool showComparisonColumn = true;
         private static bool showDisplayColumn;
 
-        private LocalizationKeyCategory[] keyCollections;
+        private KeyCollection[] keyCollections;
 
         private string[] toolbarOptions;
         private int toolbarIndex = 0;
@@ -200,8 +200,8 @@ namespace DreadScripts.Localization
             
             OnOptionsChanged();
             _comparisonLocalizationHandler = LocalizationHandler.Load(target.GetType());
-            keyCollections = targetScriptable.LocalizationKeyCollections;
-            toolbarOptions = keyCollections.Select(kc => kc.categoryName).ToArray();
+            keyCollections = targetScriptable.keyCollections;
+            toolbarOptions = keyCollections.Select(kc => kc.collectionName).ToArray();
             RefreshKeyMatches();
         }
 
@@ -456,8 +456,8 @@ namespace DreadScripts.Localization
                 if (lc == null)
                 {
                     if (
-                        (!categoryOnly && !targetScriptable.LocalizationKeyCollections.Any(kc => kc.keyNames.Any(k => k == key))) ||
-                        (categoryOnly && !targetScriptable.LocalizationKeyCollections[toolbarIndex].keyNames.Any(k => k == key))
+                        (!categoryOnly && !targetScriptable.keyCollections.Any(kc => kc.keyNames.Any(k => k == key))) ||
+                        (categoryOnly && !targetScriptable.keyCollections[toolbarIndex].keyNames.Any(k => k == key))
                         )
                     {
                         Debug.LogError(string.Format(Localize(LocalizationLocalizationKeys.KeyNotFoundLog).text, key));

@@ -10,6 +10,6 @@ namespace DreadScripts.Localization
     internal sealed class LocalizationScriptablePlaceholder : LocalizationScriptableBase
     {
         public override string hostTitle { get; } = "Placeholder";
-        public override LocalizationKeyCategory[] LocalizationKeyCollections { get; } = { };
+        public override KeyCollection[] keyCollections { get; } = { };
     }
 }

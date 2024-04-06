@@ -9,7 +9,7 @@ namespace [CHANGEME]
 	public abstract class LocalizationScriptableBase : ScriptableObject
 	{
 		public abstract string hostTitle { get; }
-		public abstract LocalizationKeyCategory[] LocalizationKeyCollections{ get; }
+		public abstract KeyCollection[] keyCollections{ get; }
 		[SerializeField] public string languageName = "";
 		[SerializeField] internal LocalizedContent[] localizedContent = Array.Empty<LocalizedContent>();
 		[Serializable]
@@ -188,15 +188,15 @@ namespace [CHANGEME]
 		}
 	}
 
-	public class LocalizationKeyCategory
+	public class KeyCollection
 	{
-		public LocalizationKeyCategory(string categoryName, params string[] keyNames)
+		public KeyCollection(string categoryName, params string[] keyNames)
 		{
 			
 			
 		}
 		
-		public LocalizationKeyCategory(string name, Type type)
+		public KeyCollection(string name, Type type)
 		{
 			
 		}
