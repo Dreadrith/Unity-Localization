@@ -101,27 +101,48 @@ namespace DreadScripts.Localization
             return success;
         }
         
-        public GUIContent Get(string keyName) => Get_Internal(keyName).ToGUIContent();
-        public GUIContent Get(string keyName, string fallBack) => Get_Internal(keyName).ToGUIContent(fallBack);
-        public GUIContent Get(string keyName, GUIContent fallBack) => Get_Internal(keyName).ToGUIContent(fallBack);
-        public GUIContent Get(string keyName, Texture2D icon) => Get_Internal(keyName).ToGUIContent(icon);
-        public GUIContent Get(string keyName, string fallBack, Texture2D icon) => Get_Internal(keyName).ToGUIContent(fallBack, icon);
-        public GUIContent Get(string keyName, GUIContent fallBack, Texture2D icon) => Get_Internal(keyName).ToGUIContent(fallBack, icon);
+        public GUIContent Get(string keyName) => StringGet_Internal(keyName, null, null);
+        public GUIContent Get(string keyName, string fallBack) => StringGet_Internal(keyName, TextToContent(fallBack), null);
+        public GUIContent Get(string keyName, GUIContent fallBack) => StringGet_Internal(keyName, fallBack, null);
+        public GUIContent Get(string keyName, Texture2D icon) => StringGet_Internal(keyName, null, icon);
+        public GUIContent Get(string keyName, string fallBack, Texture2D icon) => StringGet_Internal(keyName, TextToContent(fallBack), icon);
+        public GUIContent Get(string keyName, GUIContent fallBack, Texture2D icon) => StringGet_Internal(keyName, fallBack, icon);
         
         public GUIContent this[string keyName] => Get(keyName);
-
+        
+        private GUIContent StringGet_Internal(string keyName, GUIContent fallback, Texture2D icon) => Get_Internal(keyName).ToGUIContent(fallback, icon);
         #endregion
         
         #region Get with EnumKey
-        public bool TryGet<T2>(T2 key, out GUIContent content, Texture2D icon = null) where T2 : Enum => TryGet(GetKeyhandler(key.GetType()).ETK(key), out content, icon);
-        public GUIContent Get<T2>(T2 enumKey) where T2 : Enum => Get(GetKeyhandler(enumKey.GetType()).ETK(enumKey));
 
-        public GUIContent Get<T2>(T2 enumKey, string fallBack) where T2 : Enum => Get(GetKeyhandler(enumKey.GetType()).ETK(enumKey), fallBack);
-        public GUIContent Get<T2>(T2 enumKey, GUIContent fallBack) where T2 : Enum => Get(GetKeyhandler(enumKey.GetType()).ETK(enumKey), fallBack);
-        public GUIContent Get<T2>(T2 enumKey, Texture2D icon) where T2 : Enum => Get(GetKeyhandler(enumKey.GetType()).ETK(enumKey), icon);
-        public GUIContent Get<T2>(T2 enumKey, string fallBack, Texture2D icon) where T2 : Enum => Get(GetKeyhandler(enumKey.GetType()).ETK(enumKey), fallBack, icon);
-        public GUIContent Get<T2>(T2 enumKey, GUIContent fallBack, Texture2D icon) where T2 : Enum => Get(GetKeyhandler(enumKey.GetType()).ETK(enumKey), fallBack, icon);
+        public bool TryGet(Enum enumKey, out GUIContent content, Texture2D icon = null)
+        {
+            if (!_globalEnumDictionary.TryGetValue(enumKey, out var key))
+            {
+                key = enumKey.ToString();
+                _globalEnumDictionary.Add(enumKey, key);
+            }
+            return TryGet(key, out content, icon);
+        }
+
+        public GUIContent Get(Enum enumKey) => EnumGet_Internal(enumKey, null, null);
+        public GUIContent Get(Enum enumKey, string fallBack) => EnumGet_Internal(enumKey, TextToContent(fallBack), null);
+        public GUIContent Get(Enum enumKey, GUIContent fallBack) => EnumGet_Internal(enumKey, fallBack, null);
+        public GUIContent Get(Enum enumKey, Texture2D icon) => EnumGet_Internal(enumKey, null, icon);
+        public GUIContent Get(Enum enumKey, string fallBack, Texture2D icon) =>  EnumGet_Internal(enumKey, TextToContent(fallBack), icon);
+        public GUIContent Get(Enum enumKey, GUIContent fallBack, Texture2D icon) => EnumGet_Internal(enumKey, fallBack, icon);
         public GUIContent this[Enum key] => Get(key);
+        
+        private static readonly Dictionary<Enum, string> _globalEnumDictionary = new Dictionary<Enum, string>();
+        private GUIContent EnumGet_Internal(Enum value, GUIContent fallback, Texture2D icon)
+        {
+            if (!_globalEnumDictionary.TryGetValue(value, out var key))
+            {
+                key = value.ToString();
+                _globalEnumDictionary.Add(value, key);
+            }
+            return Get_Internal(key).ToGUIContent(fallback, icon);
+        }
         #endregion
         
         internal MiniContent Get_Internal(string keyName)

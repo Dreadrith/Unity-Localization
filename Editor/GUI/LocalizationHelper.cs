@@ -74,10 +74,10 @@ namespace DreadScripts.Localization
 
         
         public static GUIContent ToGUIContent(this MiniContent mc) => ToGUIContent(mc, (GUIContent)null, null);
-        public static GUIContent ToGUIContent(this MiniContent mc, string fallback) => ToGUIContent(mc, fallback == null ? null : new GUIContent(fallback), null);
+        public static GUIContent ToGUIContent(this MiniContent mc, string fallback) => ToGUIContent(mc, TextToContent(fallback), null);
         public static GUIContent ToGUIContent(this MiniContent mc, GUIContent fallback) => ToGUIContent(mc, fallback, null);
         public static GUIContent ToGUIContent(this MiniContent mc, Texture2D icon) => ToGUIContent(mc, (GUIContent)null, icon);
-        public static GUIContent ToGUIContent(this MiniContent mc, string fallback, Texture2D icon) => ToGUIContent(mc, fallback == null ? null : new GUIContent(fallback), icon);
+        public static GUIContent ToGUIContent(this MiniContent mc, string fallback, Texture2D icon) => ToGUIContent(mc, TextToContent(fallback), icon);
         public static GUIContent ToGUIContent(this MiniContent mc, GUIContent fallback, Texture2D icon)
         {
             if (mc == null) return fallback ?? GetMissingContent();
@@ -86,6 +86,8 @@ namespace DreadScripts.Localization
             if (!ReferenceEquals(icon, null)) content.image = icon;
             return content;
         }
+        
+        internal static GUIContent TextToContent(string text) => text == null ? null : new GUIContent(text);
 
 
     }
