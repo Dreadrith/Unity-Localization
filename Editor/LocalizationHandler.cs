@@ -150,7 +150,7 @@ namespace DreadScripts.Localization
             if (map != null) selectedLanguageIndex = Array.FindIndex(languageOptions, l => l == map);
         }
 
-        ///<summary>Refreshes the options for the language selection dropdown</summary>
+        /// <summary>Refreshes the options for the language selection dropdown</summary>
         public void RefreshLanguages()
         {
             if (localizationType == null)
@@ -165,7 +165,7 @@ namespace DreadScripts.Localization
             shouldRefresh = false;
         }
 
-        ///<summary>Draws the language selection field.</summary>
+        /// <summary>Draws the language selection field.</summary>
         /// <param name="keyName">The key to use for localizing the label of the dropdown. Falls back to 'Language' if not found.</param>
         /// <param name="onChange">Action to call on language change.</param>
         public void DrawField(string keyName = "LanguageSelectionField", Action onChange = null)
@@ -175,7 +175,7 @@ namespace DreadScripts.Localization
             DrawField(content, onChange);
         }
         
-        ///<summary>Draws the language selection field.</summary>
+        /// <summary>Draws the language selection field.</summary>
         /// <param name="content">The content to use for the label of the dropdown.</param>
         /// <param name="onChange">Action to call on language change.</param>
         public void DrawField(GUIContent content, Action onChange = null)
@@ -186,14 +186,31 @@ namespace DreadScripts.Localization
             {
                 localizationMap = languageOptions[selectedLanguageIndex];
                 localizationType = localizationMap.GetType();
-                EditorPrefs.SetString(PREFERRED_LANGUAGE_KEY, localizationMap.languageName);
+                
+                if (!EditorPrefs.HasKey(PREFERRED_LANGUAGE_KEY)) 
+                    EditorPrefs.SetString(PREFERRED_LANGUAGE_KEY, localizationMap.languageName);
+                
                 EditorPrefs.SetString($"{LANGUAGE_KEY_PREFIX}{localizationType.Name}", localizationMap.languageName);
                 onChange?.Invoke();
             }
-      
+
+            var dropdownRect = GUILayoutUtility.GetLastRect();
             //Refresh the languages when the dropdown for languages gets hovered over.
-            if (LocalizationHelper.OnHoverEnter(GUILayoutUtility.GetLastRect(), ref shouldRefresh))
+            if (LocalizationHelper.OnHoverEnter(dropdownRect, ref shouldRefresh))
                 RefreshLanguages();
+
+            if (localizationMap != null && LocalizationHelper.OnContextClick(dropdownRect))
+            {
+                GenericMenu menu = new GenericMenu();
+                //"Set as preferred language"
+                menu.AddItem(LocalizationScriptableEditor.Localize(LocalizationLocalizationKeys.PreferredLanguageMenuItem), false, () =>
+                {
+                    EditorPrefs.SetString(PREFERRED_LANGUAGE_KEY, localizationMap.languageName);
+                    //$"Preferred language set to {localizationMap.languageName}. This will try to be the default language if no specific language is set."
+                    Debug.Log($"[Localization] {string.Format(LocalizationScriptableEditor.Localize(LocalizationLocalizationKeys.PreferredLanguageSetLog).text, localizationMap.languageName)}");
+                });
+                menu.ShowAsContext();
+            }
         }
 
         /*public static void ClearCache()

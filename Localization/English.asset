@@ -74,11 +74,11 @@ MonoBehaviour:
       tooltip: 
   - keyName: TranslationTextField
     content:
-      text: text
+      text: Text
       tooltip: 
   - keyName: TranslationTooltipField
     content:
-      text: tooltip
+      text: Tooltip
       tooltip: 
   - keyName: TranslationIconField
     content:
@@ -152,4 +152,13 @@ MonoBehaviour:
   - keyName: PasteAll
     content:
       text: Paste All As CSV
+      tooltip: 
+  - keyName: PreferredLanguageMenuItem
+    content:
+      text: Set as preferred language
+      tooltip: 
+  - keyName: PreferredLanguageSetLog
+    content:
+      text: Preferred language set to {0}. This will try to be the default language
+        if no specific language is set.
       tooltip: 

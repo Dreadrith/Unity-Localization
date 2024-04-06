@@ -480,7 +480,7 @@ namespace DreadScripts.Localization
             Repaint();
         }
 
-        private static GUIContent Localize(LocalizationLocalizationKeys value, GUIContent fallbackContent = null, Texture2D icon = null) => _localizationHandlerLocalizer.Get(value, fallbackContent, icon);
+        internal static GUIContent Localize(LocalizationLocalizationKeys value, GUIContent fallbackContent = null, Texture2D icon = null) => _localizationHandlerLocalizer.Get(value, fallbackContent, icon);
 
         #endregion
 
@@ -593,7 +593,9 @@ namespace DreadScripts.Localization
         PasteAll,
         LineParseFailLog,
         KeyNotFoundLog,
-        CSVPasteFinishLog
+        CSVPasteFinishLog,
+        PreferredLanguageMenuItem,
+        PreferredLanguageSetLog
     }
 
     internal enum LocalizationPlaceholderKeys

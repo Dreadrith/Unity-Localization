@@ -53,6 +53,17 @@ namespace DreadScripts.Localization
             return false;
         }
 
+        public static bool OnContextClick(Rect r)
+        {
+            Event e = Event.current;
+            if (e.type == EventType.ContextClick && r.Contains(e.mousePosition))
+            {
+                e.Use();
+                return true;
+            }
+            return false;
+        }
+
         
         public static GUIContent ToGUIContent(this MiniContent mc) => ToGUIContent(mc, (GUIContent)null, null);
         public static GUIContent ToGUIContent(this MiniContent mc, string fallback) => ToGUIContent(mc, fallback == null ? null : new GUIContent(fallback), null);
