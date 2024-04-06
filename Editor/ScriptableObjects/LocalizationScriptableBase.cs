@@ -42,58 +42,28 @@ namespace DreadScripts.Localization
     [Serializable]
     public class MiniContent
     {
-        public string text = "";
-        public string tooltip = "";
-        /*[SerializeField] internal string _iconName = "";
-        
-        internal string iconName
-        {
-            get => _iconName;
-            set
-            {
-                if (_iconName == value) return;
-                _iconName = value;
-                iconRequiresLoad = true;
-            }
-        }
-
-        private bool iconRequiresLoad = true;
-        private Texture2D _icon;
-        public Texture2D icon
-        {
-            get
-            {
-                if (!iconRequiresLoad) return _icon;
-                
-                iconRequiresLoad = false;
-                _icon = string.IsNullOrWhiteSpace(iconName) ? null : EditorGUIUtility.IconContent(iconName).image as Texture2D;
-                return _icon;
-            }
-            set => _icon = value;
-        }*/
-
+        public string text;
+        public string tooltip;
         public MiniContent(string text)
         {
             this.text = text;
             tooltip = "";
-            //iconName = "";
         }
             
         public MiniContent(string text, string tooltip)
         {
             this.text = text;
             this.tooltip = tooltip;
-            //iconName = "";
         }
         
-        public static implicit operator GUIContent(MiniContent content) => LocalizationHelper.TempContent(content.text, content.tooltip/*, content.icon*/);
+        public static implicit operator GUIContent(MiniContent content) => LocalizationHelper.TempContent(content.text, content.tooltip);
         
     }
 
     public struct KeyCollection
     {
-        public string collectionName;
-        public string[] keyNames;
+        public readonly string collectionName;
+        public readonly string[] keyNames;
         public KeyCollection(string collectionName, params string[] keyNames)
         {
             this.collectionName = collectionName;

@@ -18,7 +18,6 @@ namespace DreadScripts.Localization
         //This is a general preference key for the preferred language. 2nd in language setting priority.
         private const string PREFERRED_LANGUAGE_KEY = "DSLocalizationPreferredLanguage";
         
-        internal static readonly Dictionary<Type, EnumToKeyHandler> typeToKeyHandlers = new Dictionary<Type, EnumToKeyHandler>();
         private static readonly Dictionary<LocalizationScriptableBase, Dictionary<string, int>> mapToLocalizationCache = new Dictionary<LocalizationScriptableBase, Dictionary<string, int>>();
         private LocalizationScriptableBase localizationMap;
         private Type localizationType;
@@ -218,46 +217,19 @@ namespace DreadScripts.Localization
 
             var dropdownRect = GUILayoutUtility.GetLastRect();
             //Refresh the languages when the dropdown for languages gets hovered over.
-            if (LocalizationHelper.OnHoverEnter(dropdownRect, ref shouldRefresh))
+            if (OnHoverEnter(dropdownRect, ref shouldRefresh))
                 RefreshLanguages();
 
-            if (localizationMap != null && LocalizationHelper.OnContextClick(dropdownRect))
+            if (localizationMap != null && OnContextClick(dropdownRect))
             {
                 GenericMenu menu = new GenericMenu();
-                //"Set as preferred language"
                 menu.AddItem(Localize(LocalizationLocalizationKeys.PreferredLanguageMenuItem), false, () =>
                 {
                     EditorPrefs.SetString(PREFERRED_LANGUAGE_KEY, localizationMap.languageName);
-                    //$"Preferred language set to {localizationMap.languageName}. This will try to be the default language if no specific language is set."
                     Debug.Log($"[Localization] {string.Format(Localize(LocalizationLogsAndErrorsKeys.PreferredLanguageSetLog).text, localizationMap.languageName)}");
                 });
                 menu.ShowAsContext();
             }
         }
-
-        /*public static void ClearCache()
-        {
-            typeToKeyHandlers.Clear();
-            mapToLocalizationCache.Clear();
-        }*/
-
-        private static EnumToKeyHandler GetKeyhandler(Type type)
-        {
-            if (typeToKeyHandlers.TryGetValue(type, out var keyHandler)) return keyHandler;
-            
-            keyHandler = new EnumToKeyHandler(Enum.GetNames(type));
-            typeToKeyHandlers.Add(type, keyHandler);
-            return keyHandler;
-        }
-    }
-    
-    internal readonly struct EnumToKeyHandler
-    {
-        private readonly string[] indexToKey;
-        internal EnumToKeyHandler(string[] indexToKey)
-        {
-            this.indexToKey = indexToKey;
-        }
-        internal string ETK(Enum key) => indexToKey[(int)(object)key];
     }
 }
