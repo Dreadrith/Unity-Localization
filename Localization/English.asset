@@ -162,3 +162,7 @@ MonoBehaviour:
       text: Preferred language set to {0}. This will try to be the default language
         if no specific language is set.
       tooltip: 
+  - keyName: MissingContent
+    content:
+      text: '[Missing Content]'
+      tooltip: This content is missing from the localization file.

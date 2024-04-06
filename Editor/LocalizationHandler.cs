@@ -5,6 +5,7 @@ using UnityEditor;
 using System;
 using System.Linq;
 using Object = UnityEngine.Object;
+using static DreadScripts.Localization.LocalizationHelper;
 
 namespace DreadScripts.Localization
 {
@@ -203,11 +204,11 @@ namespace DreadScripts.Localization
             {
                 GenericMenu menu = new GenericMenu();
                 //"Set as preferred language"
-                menu.AddItem(LocalizationScriptableEditor.Localize(LocalizationLocalizationKeys.PreferredLanguageMenuItem), false, () =>
+                menu.AddItem(Localize(LocalizationLocalizationKeys.PreferredLanguageMenuItem), false, () =>
                 {
                     EditorPrefs.SetString(PREFERRED_LANGUAGE_KEY, localizationMap.languageName);
                     //$"Preferred language set to {localizationMap.languageName}. This will try to be the default language if no specific language is set."
-                    Debug.Log($"[Localization] {string.Format(LocalizationScriptableEditor.Localize(LocalizationLocalizationKeys.PreferredLanguageSetLog).text, localizationMap.languageName)}");
+                    Debug.Log($"[Localization] {string.Format(Localize(LocalizationLogsAndErrorsKeys.PreferredLanguageSetLog).text, localizationMap.languageName)}");
                 });
                 menu.ShowAsContext();
             }

@@ -9,11 +9,14 @@ namespace DreadScripts.Localization
 {
     public static class LocalizationHelper
     {
-        public static readonly GUIContent missingContent = new GUIContent("[Missing Content]", "This content is missing from the localization file");
+        private static LocalizationHandler _localizationLocalizationHandler;
+        internal static LocalizationHandler localizationLocalizationHandler => _localizationLocalizationHandler ?? (_localizationLocalizationHandler = new LocalizationHandler(typeof(LocalizationLocalization)));
         public static readonly GUIContent addTranslationIcon = new GUIContent(EditorGUIUtility.IconContent("d_ol_plus")){tooltip = "Add Translation"};
         public static readonly GUIContent popoutIcon = new GUIContent(EditorGUIUtility.IconContent("ScaleTool")) {tooltip = "Popout"};
         public static readonly GUIContent helpIcon = new GUIContent(EditorGUIUtility.IconContent("_Help")) {tooltip = "Help"};
-        public static readonly GUIContent _tempContent = new GUIContent();
+        
+        private static readonly GUIContent fallbackMissingContent = new GUIContent("[Missing Content]", "This content is missing from the localization file");
+        private static readonly GUIContent _tempContent = new GUIContent();
 
         public static T ReadyWindow<T>(string title) where T : EditorWindow
         {
@@ -30,7 +33,12 @@ namespace DreadScripts.Localization
             _tempContent.image = icon;
             return _tempContent;
         }
+
+        public static GUIContent GetMissingContent() => Localize(LocalizationLogsAndErrorsKeys.MissingContent, fallbackMissingContent);
         
+        internal static GUIContent Localize(LocalizationLocalizationKeys value, GUIContent fallbackContent = null, Texture2D icon = null) => localizationLocalizationHandler.Get(value, fallbackContent, icon);
+        internal static GUIContent Localize(LocalizationLogsAndErrorsKeys value, GUIContent fallbackContent = null, Texture2D icon = null) => localizationLocalizationHandler.Get(value, fallbackContent, icon);
+
         public static void DrawSeparator()
         {
             int thickness = 2;
@@ -72,7 +80,7 @@ namespace DreadScripts.Localization
         public static GUIContent ToGUIContent(this MiniContent mc, string fallback, Texture2D icon) => ToGUIContent(mc, fallback == null ? null : new GUIContent(fallback), icon);
         public static GUIContent ToGUIContent(this MiniContent mc, GUIContent fallback, Texture2D icon)
         {
-            if (mc == null) return fallback ?? missingContent;
+            if (mc == null) return fallback ?? GetMissingContent();
             
             GUIContent content = mc;
             if (!ReferenceEquals(icon, null)) content.image = icon;

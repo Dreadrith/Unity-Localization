@@ -18,9 +18,7 @@ namespace DreadScripts.Localization
         #region Fields & Properties
 
         #region Fields
-
-        private static LocalizationHandler _localizationHandlerLocalizer;
-
+        
         private LocalizationScriptableBase targetScriptable;
         private LocalizationHandler _targetLocalizationHandler;
         private LocalizationHandler _comparisonLocalizationHandler;
@@ -61,6 +59,7 @@ namespace DreadScripts.Localization
 
         public override void OnInspectorGUI()
         {
+            GUILayout.Label(localizationLocalizationHandler["Wawa"]);
             using (new GUILayout.HorizontalScope("in bigtitle"))
             {
                 GUILayout.FlexibleSpace();
@@ -77,7 +76,7 @@ namespace DreadScripts.Localization
                     EditorGUI.indentLevel++;
 
                     using (new GUILayout.VerticalScope(GUI.skin.box))
-                        _localizationHandlerLocalizer.DrawField(Localize(LocalizationLocalizationKeys.EditorLanguageSelectionField));
+                        localizationLocalizationHandler.DrawField(Localize(LocalizationLocalizationKeys.EditorLanguageSelectionField));
                     
                     using (new GUILayout.HorizontalScope())
                     {
@@ -193,8 +192,6 @@ namespace DreadScripts.Localization
 
         private void OnEnable()
         {
-            _localizationHandlerLocalizer = LocalizationHandler.Load<LocalizationLocalization>();
-
             targetScriptable = (LocalizationScriptableBase) target;
             _targetLocalizationHandler = LocalizationHandler.Load(targetScriptable);
             
@@ -269,7 +266,7 @@ namespace DreadScripts.Localization
             Rect textFieldRect = new Rect(baseRect) {height = EditorGUIUtility.singleLineHeight};
             bool hasContent = km.comparisonContent != null;
             if (hasContent) GUI.Label(textFieldRect, EscapeNewLines(km.comparisonContent.text));
-            else GUI.Label(textFieldRect, missingContent);
+            else GUI.Label(textFieldRect, GetMissingContent());
 
             if (hasContent && km.foldout)
             {
@@ -299,7 +296,7 @@ namespace DreadScripts.Localization
                     ReadyKeyContent(km.keyName);
                 
 
-                GUI.Label(textFieldRect, missingContent);
+                GUI.Label(textFieldRect, GetMissingContent());
             }
             else
             {
@@ -332,7 +329,7 @@ namespace DreadScripts.Localization
             if (km.hidden) return;
             var baseRect = GetRect(km);
             DrawBackground(baseRect, km.index);
-            GUI.Label(baseRect, km.targetContent ?? missingContent);
+            GUI.Label(baseRect, km.targetContent ?? GetMissingContent());
         }
 
         private void HandleFirstColumn(KeyMatch km, ref Rect r)
@@ -350,7 +347,7 @@ namespace DreadScripts.Localization
                     km = ReadyKeyContent(km.keyName);
                     var arr = keyMatches1D.Where(km2 => km2.hasTranslation).ToArray();
                     var index = ArrayUtility.IndexOf(arr, km);
-                    LocalizationPopout.ShowWindow(popoutRect, _localizationHandlerLocalizer, targetScriptable, arr, index);
+                    LocalizationPopout.ShowWindow(popoutRect, localizationLocalizationHandler, targetScriptable, arr, index);
                 }
             }
             finally
@@ -442,7 +439,7 @@ namespace DreadScripts.Localization
                 Match m = Regex.Match(l, parsePattern);
                 if (!m.Success)
                 {
-                    Debug.LogError(string.Format(Localize(LocalizationLocalizationKeys.LineParseFailLog).text, i));
+                    Debug.LogError(string.Format(Localize(LocalizationLogsAndErrorsKeys.LineParseFailLog).text, i));
                     continue;
                 }
 
@@ -460,7 +457,7 @@ namespace DreadScripts.Localization
                         (categoryOnly && !targetScriptable.keyCollections[toolbarIndex].keyNames.Any(k => k == key))
                         )
                     {
-                        Debug.LogError(string.Format(Localize(LocalizationLocalizationKeys.KeyNotFoundLog).text, key));
+                        Debug.LogError(string.Format(Localize(LocalizationLogsAndErrorsKeys.KeyNotFoundLog).text, key));
                         continue;
                     }
 
@@ -475,13 +472,11 @@ namespace DreadScripts.Localization
             EditorUtility.SetDirty(targetScriptable);
 
             //Finished pasting to Localization file.
-            Debug.Log($"[Localization] {Localize(LocalizationLocalizationKeys.CSVPasteFinishLog).text}");
+            Debug.Log($"[Localization] {Localize(LocalizationLogsAndErrorsKeys.CSVPasteFinishLog).text}");
             RefreshKeyMatches();
             Repaint();
         }
-
-        internal static GUIContent Localize(LocalizationLocalizationKeys value, GUIContent fallbackContent = null, Texture2D icon = null) => _localizationHandlerLocalizer.Get(value, fallbackContent, icon);
-
+        
         #endregion
 
         
@@ -564,45 +559,6 @@ namespace DreadScripts.Localization
             hasTranslation = targetContent != null;
             hasComparison = comparisonContent != null;
         }
-    }
-    
-    internal enum LocalizationLocalizationKeys
-    {
-        EditorLanguageSelectionField,
-        LanguageNameField,
-        SearchField,
-        HowToUseFoldout,
-        ShowKeyNameToggle,
-        ShowComparisonToggle,
-        ShowDisplayToggle,
-        ShowIconToggle,
-        HowToUse,
-        ComparisonField,
-        KeyNameTitle,
-        TranslationTitle,
-        ComparisonTitle,
-        DisplayTitle,
-        TranslationTextField,
-        TranslationTooltipField,
-        TranslationIconField,
-        ExtrasFoldout,
-        HelpIcon,
-        CopyCategory,
-        PasteCategory,
-        CopyAll,
-        PasteAll,
-        LineParseFailLog,
-        KeyNotFoundLog,
-        CSVPasteFinishLog,
-        PreferredLanguageMenuItem,
-        PreferredLanguageSetLog
-    }
-
-    internal enum LocalizationPlaceholderKeys
-    {
-        BaseLocalizationTitle,
-        BaseLocalizationSelectionHelp,
-        BaseLocalizationSelectionField,
     }
 }
 
