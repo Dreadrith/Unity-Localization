@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using System;
 using System.Linq;
+using Object = UnityEngine.Object;
 
 namespace DreadScripts.Localization
 {
@@ -38,9 +39,27 @@ namespace DreadScripts.Localization
             
             if (allLanguages == null || allLanguages.Length == 0)
             {
-                Debug.LogError($"No localization files of type {type.Name} found");
-                SetLanguage(null);
-                return;
+                try
+                {
+                    var tempInstance = ScriptableObject.CreateInstance(type);
+                    var ms = MonoScript.FromScriptableObject(tempInstance);
+                    Object.DestroyImmediate(tempInstance);
+                    var msPath = AssetDatabase.GetAssetPath(ms);
+                    var packagePath = msPath.Substring(0, msPath.IndexOf('/', msPath.IndexOf('/') + 1));
+                    var guids = AssetDatabase.FindAssets($"t:{type.Name}", new[] {packagePath});
+                    if (guids.Length > 0) allLanguages = guids.Select(AssetDatabase.GUIDToAssetPath).Select(AssetDatabase.LoadAssetAtPath<LocalizationScriptableBase>).Where(so => so != null && so.GetType() == type).ToArray();
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"Failed to force load localization files:\n{e}");
+                }
+                
+                if (allLanguages == null || allLanguages.Length == 0)
+                {
+                    Debug.LogError($"No localization files of type {type.Name} found");
+                    SetLanguage(null);
+                    return;
+                }
             }
             
             var prefKey = $"{LANGUAGE_KEY_PREFIX}{type.Name}";
