@@ -1,0 +1,25 @@
+{
+    "name": "com.dreadscripts.localization.backup",
+    "references": [
+        "GUID:f977ed03fc1cb4541975b1862294c182"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "UNITY_EDITOR"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.dreadscripts.localization",
+            "expression": "",
+            "define": "DREADSCRIPTS_LOCALIZATION"
+        }
+    ],
+    "noEngineReferences": false
+}
