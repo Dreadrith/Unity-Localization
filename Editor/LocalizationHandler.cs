@@ -62,13 +62,13 @@ namespace DreadScripts.Localization
                 {
                     Debug.LogError($"Failed to force load localization files:\n{e}");
                 }
-                
-                if (allLanguages == null || allLanguages.Length == 0)
-                {
-                    Debug.LogError($"No localization files of type {type.Name} found");
-                    SetLanguage(null);
-                    return;
-                }
+            }
+            
+            if (allLanguages == null || allLanguages.Length == 0)
+            {
+                Debug.LogError($"No localization files of type {type.Name} found");
+                SetLanguage(null);
+                return;
             }
             
             var prefKey = $"{LANGUAGE_KEY_PREFIX}{type.Name}";
