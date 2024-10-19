@@ -181,7 +181,7 @@ namespace DreadScripts.Localization
                 return;
             }
             
-            languageOptions = (LocalizationScriptableBase[])Resources.FindObjectsOfTypeAll(localizationType);
+            languageOptions = Resources.FindObjectsOfTypeAll(localizationType).Cast<LocalizationScriptableBase>().OrderBy(sb => sb.languageName).ToArray();
             languageOptionsNames = languageOptions.Select(l => string.IsNullOrWhiteSpace(l.languageName) ? "Unnamed" : l.languageName).ToArray();
             shouldRefresh = false;
         }
