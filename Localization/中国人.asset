@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a74cd046faed01940be558b7203051dc, type: 3}
   m_Name: "\u4E2D\u56FD\u4EBA"
   m_EditorClassIdentifier: 
-  languageName: "\u4E2D\u56FD\u4EBA"
+  languageName: "\u4E2D\u6587"
   localizedContent:
   - keyName: EditorLanguageSelectionField
     content:
