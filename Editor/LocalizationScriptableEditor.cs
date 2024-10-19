@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -37,6 +37,10 @@ namespace DreadScripts.Localization
         private string[] toolbarOptions;
         private int toolbarIndex = 0;
         private string _search;
+
+        private static string[] languageOptions;
+        private static string[] languageIdentifiers;
+        private int languageOptionIndex;
 
         #endregion
 
@@ -117,8 +121,30 @@ namespace DreadScripts.Localization
             }
 
             DrawSeparator();
-            using (new GUILayout.VerticalScope(GUI.skin.box))
-                targetScriptable.languageName = EditorGUILayout.TextField(Localize(LocalizationLocalizationKeys.LanguageNameField), targetScriptable.languageName);
+            using (new GUILayout.HorizontalScope(GUI.skin.box))
+            {
+                EditorGUI.BeginChangeCheck();
+                languageOptionIndex = EditorGUILayout.Popup(Localize(LocalizationLocalizationKeys.LanguageNameField), languageOptionIndex, languageOptions);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    if (languageOptionIndex != 0)
+                    {
+                        targetScriptable.languageName = languageIdentifiers[languageOptionIndex-1];
+                        EditorUtility.SetDirty(targetScriptable);
+                    }
+                }
+
+                if (languageOptionIndex == 0)
+                {
+                    EditorGUI.BeginChangeCheck();
+                    string dummy = EditorGUILayout.DelayedTextField(targetScriptable.languageName, GUILayout.Width(200));
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        targetScriptable.languageName = dummy;
+                        EditorUtility.SetDirty(targetScriptable);
+                    }
+                }
+            }
             
             if (showComparisonColumn)
                 using (new GUILayout.VerticalScope(GUI.skin.box))
@@ -193,6 +219,17 @@ namespace DreadScripts.Localization
         {
             targetScriptable = (LocalizationScriptableBase) target;
             _targetLocalizationHandler = LocalizationHandler.Load(targetScriptable);
+            
+            if (languageOptions == null)
+            {
+                var cultures = CultureInfo.GetCultures(CultureTypes.NeutralCultures).Skip(1).OrderBy(c => c.EnglishName).ToArray();
+                
+                languageOptions = cultures.Select(c => $"{c.EnglishName} ({c.TextInfo.ToTitleCase(c.NativeName)})").Prepend("[Custom]").ToArray();
+                languageIdentifiers = cultures.Select(c => c.TextInfo.ToTitleCase(c.NativeName)).ToArray();
+            }
+            languageOptionIndex = Array.IndexOf(languageIdentifiers, targetScriptable.languageName);
+            if (languageOptionIndex == -1) languageOptionIndex = 0;
+            else languageOptionIndex++;
             
             OnOptionsChanged();
             _comparisonLocalizationHandler = LocalizationHandler.Load(target.GetType());
