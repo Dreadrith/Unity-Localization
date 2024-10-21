@@ -155,7 +155,7 @@ MonoBehaviour:
       tooltip: 
   - keyName: PreferredLanguageMenuItem
     content:
-      text: Set as preferred language
+      text: Set {0} as preferred language
       tooltip: 
   - keyName: PreferredLanguageSetLog
     content:

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System;
@@ -12,12 +11,6 @@ namespace DreadScripts.Localization
 
     public class LocalizationHandler
     {
-        //This is a prefix preference key for the language of a specific type. 1st in language setting priority.
-        private const string LANGUAGE_KEY_PREFIX = "DSLocalizationLanguage";
-        
-        //This is a general preference key for the preferred language. 2nd in language setting priority.
-        private const string PREFERRED_LANGUAGE_KEY = "DSLocalizationPreferredLanguage";
-        
         private static readonly Dictionary<LocalizationScriptableBase, Dictionary<string, int>> mapToLocalizationCache = new Dictionary<LocalizationScriptableBase, Dictionary<string, int>>();
         private LocalizationScriptableBase localizationMap;
         private Type localizationType;
@@ -71,7 +64,7 @@ namespace DreadScripts.Localization
                 return;
             }
             
-            var prefKey = $"{LANGUAGE_KEY_PREFIX}{type.Name}";
+            var prefKey = $"{LocalizationConstants.LANGUAGE_KEY_PREFIX}{type.Name}";
         
             //Tries to load product specific lannguage first, then preferred language, then base language
             
@@ -80,8 +73,8 @@ namespace DreadScripts.Localization
             if (EditorPrefs.HasKey(prefKey)) 
                 map = allLanguages.FirstOrDefault(m => m.languageName == EditorPrefs.GetString(prefKey));
             
-            if (map == null && EditorPrefs.HasKey(PREFERRED_LANGUAGE_KEY)) 
-                map = allLanguages.FirstOrDefault(m => m.languageName == EditorPrefs.GetString(PREFERRED_LANGUAGE_KEY));
+            if (map == null && EditorPrefs.HasKey(LocalizationConstants.PREFERRED_LANGUAGE_KEY)) 
+                map = allLanguages.FirstOrDefault(m => m.languageName == EditorPrefs.GetString(LocalizationConstants.PREFERRED_LANGUAGE_KEY));
             
             if (map == null) 
                 map = allLanguages.FirstOrDefault(m => m.languageName == baseLanguageName);
@@ -162,6 +155,13 @@ namespace DreadScripts.Localization
 
             return localizedContent[index].content;
         }
+
+        #region Language
+        internal void SetLanguage(object userData)
+        {
+            LocalizationScriptableBase map = userData as LocalizationScriptableBase;
+            if (map != null) SetLanguage(map);
+        }
         
         public void SetLanguage(LocalizationScriptableBase map)
         {
@@ -185,14 +185,22 @@ namespace DreadScripts.Localization
             languageOptionsNames = languageOptions.Select(l => string.IsNullOrWhiteSpace(l.languageName) ? "Unnamed" : l.languageName).ToArray();
             shouldRefresh = false;
         }
+        #endregion
 
-        /// <summary>Draws the language selection field.</summary>
-        /// <param name="keyName">The key to use for localizing the label of the dropdown. Falls back to 'Language' if not found.</param>
+        #region GUI
+
+        /// <summary>Draws the language selection field. </summary>
         /// <param name="onChange">Action to call on language change.</param>
-        public void DrawField(string keyName = "LanguageSelectionField", Action onChange = null)
+        public void DrawField(Action onChange = null) => DrawField(false, onChange);
+        
+        /// <summary>Draws the language selection field. </summary>
+        /// <param name="drawWithIcon">Draw the blue globe icon next to the text</param>
+        /// <param name="onChange">Action to call on language change.</param>
+        public void DrawField(bool drawWithIcon, Action onChange)
         {
-            if (!TryGet(keyName, out var content))
-                content = LocalizationHelper.TempContent("Language");
+            string label = GetLanguageWordTranslation(localizationMap.languageName ?? "English");
+            GUIContent content = new GUIContent(label);
+            if (drawWithIcon) content.image = LocalizationStyles.Styles.globeIcon.Value?.image;
             DrawField(content, onChange);
         }
         
@@ -208,28 +216,83 @@ namespace DreadScripts.Localization
                 localizationMap = languageOptions[selectedLanguageIndex];
                 localizationType = localizationMap.GetType();
                 
-                if (!EditorPrefs.HasKey(PREFERRED_LANGUAGE_KEY)) 
-                    EditorPrefs.SetString(PREFERRED_LANGUAGE_KEY, localizationMap.languageName);
+                if (!EditorPrefs.HasKey(LocalizationConstants.PREFERRED_LANGUAGE_KEY)) 
+                    EditorPrefs.SetString(LocalizationConstants.PREFERRED_LANGUAGE_KEY, localizationMap.languageName);
                 
-                EditorPrefs.SetString($"{LANGUAGE_KEY_PREFIX}{localizationType.Name}", localizationMap.languageName);
+                EditorPrefs.SetString($"{LocalizationConstants.LANGUAGE_KEY_PREFIX}{localizationType.Name}", localizationMap.languageName);
                 onChange?.Invoke();
             }
 
             var dropdownRect = GUILayoutUtility.GetLastRect();
-            //Refresh the languages when the dropdown for languages gets hovered over.
-            if (OnHoverEnter(dropdownRect, ref shouldRefresh))
-                RefreshLanguages();
+            DoLanguageContextEvent(dropdownRect);
+        }
 
-            if (localizationMap != null && OnContextClick(dropdownRect))
+        public void DrawIconOnlyField() => DrawIconOnlyField(EditorGUILayout.GetControlRect(false, 20, GUIStyle.none, GUILayout.Width(20)));
+        public void DrawIconOnlyField(Rect rect)
+        {
+            Color ogColor = GUI.color;
+            try
+            {
+                GUI.color = new Color(0.2f,0.9f,1);
+                
+                GUI.Label(rect, LocalizationStyles.Styles.globeIcon.Value);
+                EditorGUIUtility.AddCursorRect(rect, MouseCursor.Link);
+                DoLanguageClickEvent(rect);
+                DoLanguageContextEvent(rect);
+            }
+            finally
+            {
+                GUI.color = ogColor;
+            }
+        }
+
+        internal void DoLanguageClickEvent(Rect rect)
+        {
+            if (OnLeftClick(rect)) 
+                ShowLanguageOptionsMenu();
+            
+        }
+        internal void DoLanguageContextEvent(Rect rect)
+        {
+            //Refresh the languages when the dropdown for languages gets hovered over.
+            if (OnHoverEnter(rect, ref shouldRefresh))
+                RefreshLanguages();
+            
+            if (localizationMap != null && OnContextClick(rect))
             {
                 GenericMenu menu = new GenericMenu();
-                menu.AddItem(Localize(LocalizationLocalizationKeys.PreferredLanguageMenuItem), false, () =>
+                menu.AddItem(new GUIContent(string.Format(Localize(LocalizationLocalizationKeys.PreferredLanguageMenuItem).text, localizationMap.languageName)), false, () =>
                 {
-                    EditorPrefs.SetString(PREFERRED_LANGUAGE_KEY, localizationMap.languageName);
-                    Debug.Log($"[Localization] {string.Format(Localize(LocalizationLogsAndErrorsKeys.PreferredLanguageSetLog).text, localizationMap.languageName)}");
+                    SetPreferredLanguage(localizationMap.languageName);
                 });
                 menu.ShowAsContext();
             }
         }
+        #endregion
+        
+        #region Helper
+        public string GetLanguageWordTranslation(string languageName)
+        {
+            if (!TryGet("LanguageWordTranslation", out var content))
+            {
+                TryGetLanguageWordTranslation(languageName, out string translatedWord);
+                content = TempContent(translatedWord);
+            }
+
+            return content.text;
+        }
+
+        public void ShowLanguageOptionsMenu()
+        {
+            GenericMenu menu = new GenericMenu();
+            for (var i = 0; i < languageOptions.Length; i++)
+            {
+                var l = languageOptions[i];
+                menu.AddItem(new GUIContent(languageOptionsNames[i]), selectedLanguageIndex == i, SetLanguage, l);
+            }
+
+            menu.ShowAsContext();
+        }
+        #endregion
     }
 }

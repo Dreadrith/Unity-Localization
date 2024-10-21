@@ -61,6 +61,17 @@ namespace DreadScripts.Localization
             return false;
         }
 
+        public static bool OnLeftClick(Rect r)
+        {
+            Event e = Event.current;
+            if (e.type == EventType.MouseDown && e.button == 0 && r.Contains(e.mousePosition))
+            {
+                e.Use();
+                return true;
+            }
+            return false;
+        }
+        
         public static bool OnContextClick(Rect r)
         {
             Event e = Event.current;
@@ -89,7 +100,19 @@ namespace DreadScripts.Localization
         
         internal static GUIContent TextToContent(string text) => text == null ? null : new GUIContent(text);
 
-
+        ///<summary>Gets the native word of 'Language' in the given language name. If it doesn't exists, returns false and outs 'Language'.</summary>
+        public static bool TryGetLanguageWordTranslation(string languageName, out string translatedWord)
+        {
+            bool found = LocalizationConstants.LanguageWordTranslationDictionary.TryGetValue(languageName, out translatedWord);
+            if (!found) translatedWord = "Language";
+            return found;
+        }
+        
+        public static void SetPreferredLanguage(string languageName)
+        {
+            EditorPrefs.SetString(LocalizationConstants.PREFERRED_LANGUAGE_KEY, languageName);
+            Debug.Log($"[Localization] {string.Format(Localize(LocalizationLogsAndErrorsKeys.PreferredLanguageSetLog).text, languageName)}");
+        }
     }
 
     
