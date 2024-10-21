@@ -107,8 +107,13 @@ namespace DreadScripts.Localization
             if (!found) translatedWord = "Language";
             return found;
         }
-        
-        public static void SetPreferredLanguage(string languageName)
+
+        public static void SetGlobalPreferredLanguage(LocalizationScriptableBase languageMap)
+        {
+            if (languageMap != null) 
+                SetGlobalPreferredLanguage(languageMap.languageName);
+        }
+        public static void SetGlobalPreferredLanguage(string languageName)
         {
             EditorPrefs.SetString(LocalizationConstants.PREFERRED_LANGUAGE_KEY, languageName);
             Debug.Log($"[Localization] {string.Format(Localize(LocalizationLogsAndErrorsKeys.PreferredLanguageSetLog).text, languageName)}");

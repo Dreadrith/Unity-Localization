@@ -17,7 +17,5 @@ namespace DreadScripts.Localization
             fadedLabel = new GUIStyle(GUI.skin.label) {fontStyle = FontStyle.Italic, alignment = TextAnchor.MiddleRight, contentOffset = new Vector2(-4f, 0), normal = {textColor = new Color(1, 1, 1, 0.33f)}},
             wrappedTextArea = new GUIStyle(EditorStyles.textArea) {wordWrap = true},
             wrappedLabel = new GUIStyle(GUI.skin.label) {alignment = TextAnchor.UpperLeft, wordWrap = true};
-
-        public readonly Lazy<GUIContent> globeIcon = new Lazy<GUIContent>(() => new GUIContent(EditorGUIUtility.IconContent("BuildSettings.Web.Small")){tooltip = "Language"});
     }
 }

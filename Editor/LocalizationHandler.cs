@@ -11,20 +11,36 @@ namespace DreadScripts.Localization
 
     public class LocalizationHandler
     {
+        private static readonly Lazy<GUIContent> lazyGlobeIcon = new Lazy<GUIContent>(() => new GUIContent(EditorGUIUtility.IconContent("BuildSettings.Web.Small")){tooltip = "Language"});
+        public static GUIContent globeIcon => lazyGlobeIcon.Value;
+        
         private static readonly Dictionary<LocalizationScriptableBase, Dictionary<string, int>> mapToLocalizationCache = new Dictionary<LocalizationScriptableBase, Dictionary<string, int>>();
         private LocalizationScriptableBase localizationMap;
         private Type localizationType;
-        
+
+        public Action onLanguageChanged;
         public LocalizationScriptableBase[] languageOptions;
         public string[] languageOptionsNames;
         public int selectedLanguageIndex;
+        public bool hasSelectedALanguage;
         private bool shouldRefresh;
-        
+        private Vector2 scroll;
+
+        public string typePreferredLanguagePrefKey => $"{LocalizationConstants.LANGUAGE_KEY_PREFIX}{localizationType.Name}";
+        public LocalizationScriptableBase selectedLanguage
+        {
+            get
+            {
+                if (languageOptions == null || selectedLanguageIndex < 0 || selectedLanguageIndex >= languageOptions.Length) return null;
+                return languageOptions[selectedLanguageIndex];
+            }
+        }
+  
         #region Instancing
         public static LocalizationHandler Load(LocalizationScriptableBase map) => new LocalizationHandler(map);
         public static LocalizationHandler Load<T>(string baseLanguageName = "English") where T : LocalizationScriptableBase => new LocalizationHandler(typeof(T), baseLanguageName);
         public static LocalizationHandler Load(Type type, string baseLanguageName = "English") => new LocalizationHandler(type, baseLanguageName);
-        public LocalizationHandler(LocalizationScriptableBase map) => SetLanguage(map);
+        public LocalizationHandler(LocalizationScriptableBase map) => SetLanguage(map, false);
         
         public LocalizationHandler(Type type, string baseLanguageName = "English")
         {
@@ -60,18 +76,21 @@ namespace DreadScripts.Localization
             if (allLanguages == null || allLanguages.Length == 0)
             {
                 Debug.LogError($"No localization files of type {type.Name} found");
-                SetLanguage(null);
+                SetLanguage(null, false);
                 return;
             }
             
-            var prefKey = $"{LocalizationConstants.LANGUAGE_KEY_PREFIX}{type.Name}";
+           
         
             //Tries to load product specific lannguage first, then preferred language, then base language
             
             LocalizationScriptableBase map = null;
-            
-            if (EditorPrefs.HasKey(prefKey)) 
+            var prefKey = $"{LocalizationConstants.LANGUAGE_KEY_PREFIX}{type.Name}";
+            if (EditorPrefs.HasKey(prefKey))
+            {
                 map = allLanguages.FirstOrDefault(m => m.languageName == EditorPrefs.GetString(prefKey));
+                if (map != null) hasSelectedALanguage = true;
+            }
             
             if (map == null && EditorPrefs.HasKey(LocalizationConstants.PREFERRED_LANGUAGE_KEY)) 
                 map = allLanguages.FirstOrDefault(m => m.languageName == EditorPrefs.GetString(LocalizationConstants.PREFERRED_LANGUAGE_KEY));
@@ -80,7 +99,7 @@ namespace DreadScripts.Localization
                 map = allLanguages.FirstOrDefault(m => m.languageName == baseLanguageName);
             
             if (map == null) map = allLanguages.First();
-            SetLanguage(map);
+            SetLanguage(map, false);
         }
         #endregion
 
@@ -163,12 +182,15 @@ namespace DreadScripts.Localization
             if (map != null) SetLanguage(map);
         }
         
-        public void SetLanguage(LocalizationScriptableBase map)
+        public void SetLanguage(LocalizationScriptableBase map, bool setAsTypePreferred = true)
         {
+            bool changed = localizationMap != map;
             localizationMap = map;
             localizationType = map != null ? map.GetType() : null;
+            if (setAsTypePreferred) SetCurrentMapAsTypePrefferedLanguage();
             RefreshLanguages();
             if (map != null) selectedLanguageIndex = Array.FindIndex(languageOptions, l => l == map);
+            if (changed) onLanguageChanged?.Invoke();
         }
 
         /// <summary>Refreshes the options for the language selection dropdown</summary>
@@ -190,37 +212,33 @@ namespace DreadScripts.Localization
         #region GUI
 
         /// <summary>Draws the language selection field. </summary>
-        /// <param name="onChange">Action to call on language change.</param>
-        public void DrawField(Action onChange = null) => DrawField(false, onChange);
+        public void DrawField() => DrawField(false);
         
         /// <summary>Draws the language selection field. </summary>
-        /// <param name="drawWithIcon">Draw the blue globe icon next to the text</param>
-        /// <param name="onChange">Action to call on language change.</param>
-        public void DrawField(bool drawWithIcon, Action onChange)
+        /// <param name="drawWithIcon">Draw a globe icon next to the text</param>
+        public void DrawField(bool drawWithIcon)
         {
             string label = GetLanguageWordTranslation(localizationMap.languageName ?? "English");
             GUIContent content = new GUIContent(label);
-            if (drawWithIcon) content.image = LocalizationStyles.Styles.globeIcon.Value?.image;
-            DrawField(content, onChange);
+            if (drawWithIcon) content.image = globeIcon.image;
+            DrawField(content);
         }
         
         /// <summary>Draws the language selection field.</summary>
         /// <param name="content">The content to use for the label of the dropdown.</param>
-        /// <param name="onChange">Action to call on language change.</param>
-        public void DrawField(GUIContent content, Action onChange = null)
+        /// <param name="drawWithIcon">Draw a globe icon next to the text</param>
+        public void DrawField(GUIContent content, bool drawWithIcon = false)
         {
+            if (drawWithIcon) content = new GUIContent(content) {image = globeIcon.image};
             EditorGUI.BeginChangeCheck();
             selectedLanguageIndex = EditorGUILayout.Popup(content, selectedLanguageIndex, languageOptionsNames);
             if (EditorGUI.EndChangeCheck())
             {
-                localizationMap = languageOptions[selectedLanguageIndex];
-                localizationType = localizationMap.GetType();
+                SetLanguage(languageOptions[selectedLanguageIndex]);
                 
                 if (!EditorPrefs.HasKey(LocalizationConstants.PREFERRED_LANGUAGE_KEY)) 
                     EditorPrefs.SetString(LocalizationConstants.PREFERRED_LANGUAGE_KEY, localizationMap.languageName);
                 
-                EditorPrefs.SetString($"{LocalizationConstants.LANGUAGE_KEY_PREFIX}{localizationType.Name}", localizationMap.languageName);
-                onChange?.Invoke();
             }
 
             var dropdownRect = GUILayoutUtility.GetLastRect();
@@ -234,16 +252,42 @@ namespace DreadScripts.Localization
             try
             {
                 GUI.color = new Color(0.2f,0.9f,1);
-                
-                GUI.Label(rect, LocalizationStyles.Styles.globeIcon.Value);
+                GUI.Label(rect, globeIcon);
                 EditorGUIUtility.AddCursorRect(rect, MouseCursor.Link);
                 DoLanguageClickEvent(rect);
                 DoLanguageContextEvent(rect);
             }
-            finally
+            finally { GUI.color = ogColor; }
+        }
+
+        public void DrawLanguageSelectionList()
+        {
+            var languageButtonStyle = new GUIStyle(GUI.skin.button)
             {
-                GUI.color = ogColor;
+                fontStyle = FontStyle.Bold,
+                fontSize = 24,
+                padding = new RectOffset(8, 8, 8, 8)
+            };
+
+            void Draw(int i)
+            {
+                if (GUILayout.Button(languageOptionsNames[i], languageButtonStyle))
+                    SetLanguage(languageOptions[i]);
+                
+                EditorGUIUtility.AddCursorRect(GUILayoutUtility.GetLastRect(), MouseCursor.Link);
             }
+
+            scroll = EditorGUILayout.BeginScrollView(scroll);
+            using (new GUILayout.HorizontalScope())
+            {
+                int l = languageOptions.Length;
+                using (new GUILayout.VerticalScope())
+                    for (int i = 0; i < l; i+=2) Draw(i);
+                
+                using (new GUILayout.VerticalScope())
+                    for (int i = 1; i < l; i+=2) Draw(i);
+            }
+            EditorGUILayout.EndScrollView();
         }
 
         internal void DoLanguageClickEvent(Rect rect)
@@ -263,7 +307,7 @@ namespace DreadScripts.Localization
                 GenericMenu menu = new GenericMenu();
                 menu.AddItem(new GUIContent(string.Format(Localize(LocalizationLocalizationKeys.PreferredLanguageMenuItem).text, localizationMap.languageName)), false, () =>
                 {
-                    SetPreferredLanguage(localizationMap.languageName);
+                    SetGlobalPreferredLanguage(localizationMap.languageName);
                 });
                 menu.ShowAsContext();
             }
@@ -292,6 +336,23 @@ namespace DreadScripts.Localization
             }
 
             menu.ShowAsContext();
+        }
+
+        public void SetCurrentMapAsTypePrefferedLanguage() => SetTypePrefferedLanguage(localizationMap);
+        public void SetCurrentMapAsGlobalPrefferedLanguage() => SetGlobalPreferredLanguage(localizationMap);
+
+        public void SetTypePrefferedLanguage(LocalizationScriptableBase languageMap)
+        {
+            if (localizationMap != null) 
+                SetTypePrefferedLanguage(languageMap.languageName);
+        }
+        public void SetTypePrefferedLanguage(string languageName)
+        {
+            if (localizationType != null)
+            {
+                EditorPrefs.SetString(typePreferredLanguagePrefKey, languageName);
+                hasSelectedALanguage = true;
+            }
         }
         #endregion
     }

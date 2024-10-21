@@ -148,7 +148,7 @@ namespace DreadScripts.Localization
             
             if (showComparisonColumn)
                 using (new GUILayout.VerticalScope(GUI.skin.box))
-                    _comparisonLocalizationHandler.DrawField(Localize(LocalizationLocalizationKeys.ComparisonField), RefreshKeyMatches);
+                    _comparisonLocalizationHandler.DrawField(Localize(LocalizationLocalizationKeys.ComparisonField));
             
             using (new GUILayout.VerticalScope(GUI.skin.box))
                 search = EditorGUILayout.TextField(Localize(LocalizationLocalizationKeys.SearchField), search, EditorStyles.toolbarSearchField);
@@ -233,6 +233,7 @@ namespace DreadScripts.Localization
             
             OnOptionsChanged();
             _comparisonLocalizationHandler = LocalizationHandler.Load(target.GetType());
+            _comparisonLocalizationHandler.onLanguageChanged = RefreshKeyMatches;
             keyCollections = targetScriptable.keyCollections;
             toolbarOptions = keyCollections.Select(kc => kc.collectionName).ToArray();
             RefreshKeyMatches();
