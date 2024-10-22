@@ -12,13 +12,13 @@ namespace DreadScripts.Localization
     public class LocalizationHandler<T> : LocalizationHandlerBase where T : LocalizationScriptableBase
     {
         // ReSharper disable once StaticMemberInGenericType
-        private static readonly Dictionary<string, int> localizationCache = new Dictionary<string, int>();
+        private static readonly Dictionary<T, Dictionary<string, int>> mapToLocalizationCache = new Dictionary<T, Dictionary<string, int>>();
         
         public Action onLanguageChanged;
         public T[] builtinLanguages;
         public T[] languageOptions;
         public string[] languageOptionsNames;
-        private T localizationMap;
+        public T selectedLanguage;
         public int selectedLanguageIndex;
 
         public bool hasSelectedALanguage;
@@ -27,15 +27,6 @@ namespace DreadScripts.Localization
         private Vector2 scroll;
 
         public string typePreferredLanguagePrefKey => $"{LocalizationConstants.LANGUAGE_KEY_PREFIX}{typeof(T).Name}";
-        
-        public T selectedLanguage
-        {
-            get
-            {
-                if (languageOptions == null || selectedLanguageIndex < 0 || selectedLanguageIndex >= languageOptions.Length) return null;
-                return languageOptions[selectedLanguageIndex];
-            }
-        }
   
         #region Instancing
 
@@ -166,8 +157,14 @@ namespace DreadScripts.Localization
         
         internal MiniContent Get_Internal(string keyName)
         {
-            if (localizationMap == null) return null;
-            var localizedContent = localizationMap.localizedContent;
+            if (selectedLanguage == null) return null;
+            if (!mapToLocalizationCache.TryGetValue(selectedLanguage, out var localizationCache))
+            {
+                localizationCache = new Dictionary<string, int>();
+                mapToLocalizationCache.Add(selectedLanguage, localizationCache);
+            }
+            
+            var localizedContent = selectedLanguage.localizedContent;
             if (!(localizationCache.TryGetValue(keyName, out var index)))
             {
                 index = Array.FindIndex(localizedContent, c => c.keyName == keyName);
@@ -187,8 +184,8 @@ namespace DreadScripts.Localization
         
         public void SetLanguage(T map, bool setAsTypePreferred)
         {
-            bool changed = localizationMap != map;
-            localizationMap = map;
+            bool changed = selectedLanguage != map;
+            selectedLanguage = map;
             if (setAsTypePreferred) 
                 SetCurrentMapAsTypePrefferedLanguage();
             RefreshLanguageOptions();
@@ -214,7 +211,7 @@ namespace DreadScripts.Localization
         /// <param name="drawWithIcon">Draw a globe icon next to the text</param>
         public void DrawField(bool drawWithIcon)
         {
-            string label = GetLanguageWordTranslation(localizationMap.languageName ?? "English");
+            string label = GetLanguageWordTranslation(selectedLanguage.languageName ?? "English");
             GUIContent content = new GUIContent(label);
             if (drawWithIcon) content.image = globeIcon.image;
             DrawField(content);
@@ -233,7 +230,7 @@ namespace DreadScripts.Localization
                 SetLanguage(languageOptions[selectedLanguageIndex]);
                 
                 if (!EditorPrefs.HasKey(LocalizationConstants.PREFERRED_LANGUAGE_KEY)) 
-                    EditorPrefs.SetString(LocalizationConstants.PREFERRED_LANGUAGE_KEY, localizationMap.languageName);
+                    EditorPrefs.SetString(LocalizationConstants.PREFERRED_LANGUAGE_KEY, selectedLanguage.languageName);
                 
             }
 
@@ -298,12 +295,12 @@ namespace DreadScripts.Localization
             if (OnHoverEnter(rect, ref shouldRefresh))
                 RefreshLanguageOptions();
             
-            if (localizationMap != null && OnContextClick(rect))
+            if (selectedLanguage != null && OnContextClick(rect))
             {
                 GenericMenu menu = new GenericMenu();
-                menu.AddItem(new GUIContent(string.Format(Localize(LocalizationLocalizationKeys.PreferredLanguageMenuItem).text, localizationMap.languageName)), false, () =>
+                menu.AddItem(new GUIContent(string.Format(Localize(LocalizationLocalizationKeys.PreferredLanguageMenuItem).text, selectedLanguage.languageName)), false, () =>
                 {
-                    SetGlobalPreferredLanguage(localizationMap.languageName);
+                    SetGlobalPreferredLanguage(selectedLanguage.languageName);
                 });
                 menu.ShowAsContext();
             }
@@ -334,12 +331,12 @@ namespace DreadScripts.Localization
             menu.ShowAsContext();
         }
 
-        public void SetCurrentMapAsTypePrefferedLanguage() => SetTypePrefferedLanguage(localizationMap);
-        public void SetCurrentMapAsGlobalPrefferedLanguage() => SetGlobalPreferredLanguage(localizationMap);
+        public void SetCurrentMapAsTypePrefferedLanguage() => SetTypePrefferedLanguage(selectedLanguage);
+        public void SetCurrentMapAsGlobalPrefferedLanguage() => SetGlobalPreferredLanguage(selectedLanguage);
 
         public void SetTypePrefferedLanguage(LocalizationScriptableBase languageMap)
         {
-            if (localizationMap != null) 
+            if (selectedLanguage != null) 
                 SetTypePrefferedLanguage(languageMap.languageName);
         }
         public void SetTypePrefferedLanguage(string languageName)
