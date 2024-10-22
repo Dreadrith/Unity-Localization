@@ -19,15 +19,13 @@ namespace DreadScripts.Localization
         private string[] keyNames;
         private object splitState;
 
-        private LocalizationHandler localizer;
         private ScriptableObject targetScriptable;
         private KeyMatch[] keyMatches;
         private int selectedKeyIndex;
 
-        internal static void ShowWindow(Rect r, LocalizationHandler localizer, ScriptableObject target, KeyMatch[] matches, int index = 0)
+        internal static void ShowWindow(Rect r, ScriptableObject target, KeyMatch[] matches, int index = 0)
         {
             var instance = ReadyWindow<LocalizationPopout>("Localization Popout");
-            instance.localizer = localizer;
             instance.targetScriptable = target;
             instance.keyMatches = matches;
             instance.keyNames = matches.Select(k => k.keyName).ToArray();

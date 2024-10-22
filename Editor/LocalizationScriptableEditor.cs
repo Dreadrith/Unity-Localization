@@ -20,8 +20,8 @@ namespace DreadScripts.Localization
         #region Fields
         
         private LocalizationScriptableBase targetScriptable;
-        private LocalizationHandler _targetLocalizationHandler;
-        private LocalizationHandler _comparisonLocalizationHandler;
+        private LocalizationHandler<LocalizationScriptableBase> _targetLocalizationHandler;
+        private LocalizationHandler<LocalizationScriptableBase> _comparisonLocalizationHandler;
         private KeyMatch[][] keyMatches2D;
         private KeyMatch[] keyMatches1D;
         private object splitState;
@@ -218,7 +218,7 @@ namespace DreadScripts.Localization
         private void OnEnable()
         {
             targetScriptable = (LocalizationScriptableBase) target;
-            _targetLocalizationHandler = LocalizationHandler.Load(targetScriptable);
+            _targetLocalizationHandler = LocalizationHandler<LocalizationScriptableBase>.CreateFromLanguages(targetScriptable);
             
             if (languageOptions == null)
             {
@@ -232,7 +232,7 @@ namespace DreadScripts.Localization
             else languageOptionIndex++;
             
             OnOptionsChanged();
-            _comparisonLocalizationHandler = LocalizationHandler.Load(target.GetType());
+            _comparisonLocalizationHandler =  LocalizationHandler<LocalizationScriptableBase>.CreateFromLanguages((LocalizationScriptableBase[])Resources.FindObjectsOfTypeAll(target.GetType()));
             _comparisonLocalizationHandler.onLanguageChanged = RefreshKeyMatches;
             keyCollections = targetScriptable.keyCollections;
             toolbarOptions = keyCollections.Select(kc => kc.collectionName).ToArray();
@@ -384,7 +384,7 @@ namespace DreadScripts.Localization
                     km = ReadyKeyContent(km.keyName);
                     var arr = keyMatches1D.Where(km2 => km2.hasTranslation).ToArray();
                     var index = ArrayUtility.IndexOf(arr, km);
-                    LocalizationPopout.ShowWindow(popoutRect, localizationLocalizationHandler, targetScriptable, arr, index);
+                    LocalizationPopout.ShowWindow(popoutRect, targetScriptable, arr, index);
                 }
             }
             finally
@@ -522,7 +522,7 @@ namespace DreadScripts.Localization
     [CustomEditor(typeof(LocalizationScriptablePlaceholder))]
     internal class LocalizationPlaceholderEditor : Editor
     {
-        private static LocalizationHandler _localizationHandlerLocalizer;
+        private static LocalizationHandler<LocalizationLocalization> _localizationHandlerLocalizer;
         
         private static readonly Type[] dropdownIgnoredTypes =
         {
@@ -569,7 +569,7 @@ namespace DreadScripts.Localization
         
         private void OnEnable()
         {
-            _localizationHandlerLocalizer = LocalizationHandler.Load<LocalizationLocalization>();
+            _localizationHandlerLocalizer = LocalizationHandler<LocalizationLocalization>.LoadLanguagesFromAssets();
         }
     }
     

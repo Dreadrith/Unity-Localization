@@ -11,7 +11,7 @@ namespace DreadScripts.Localization
 		public static bool foldout;
 		public static string debugKey = "";
 
-		public static void DrawDebugger<T>(LocalizationHandler handler) where T : LocalizationScriptableBase
+		public static void DrawDebugger<T>(LocalizationHandler<T> handler) where T : LocalizationScriptableBase
 		{
 			using (new GUILayout.VerticalScope(GUI.skin.box))
 			{

@@ -9,25 +9,26 @@ using static DreadScripts.Localization.LocalizationHelper;
 namespace DreadScripts.Localization
 {
 
-    public class LocalizationHandler
+    public class LocalizationHandler<T> : LocalizationHandlerBase where T : LocalizationScriptableBase
     {
-        private static readonly Lazy<GUIContent> lazyGlobeIcon = new Lazy<GUIContent>(() => new GUIContent(EditorGUIUtility.IconContent("BuildSettings.Web.Small")){tooltip = "Language"});
-        public static GUIContent globeIcon => lazyGlobeIcon.Value;
+        // ReSharper disable once StaticMemberInGenericType
+        private static readonly Dictionary<string, int> localizationCache = new Dictionary<string, int>();
         
-        private static readonly Dictionary<LocalizationScriptableBase, Dictionary<string, int>> mapToLocalizationCache = new Dictionary<LocalizationScriptableBase, Dictionary<string, int>>();
-        private LocalizationScriptableBase localizationMap;
-        private Type localizationType;
-
         public Action onLanguageChanged;
-        public LocalizationScriptableBase[] languageOptions;
+        public T[] builtinLanguages;
+        public T[] languageOptions;
         public string[] languageOptionsNames;
+        private T localizationMap;
         public int selectedLanguageIndex;
+
         public bool hasSelectedALanguage;
         private bool shouldRefresh;
+        private bool loadFromAssets;
         private Vector2 scroll;
 
-        public string typePreferredLanguagePrefKey => $"{LocalizationConstants.LANGUAGE_KEY_PREFIX}{localizationType.Name}";
-        public LocalizationScriptableBase selectedLanguage
+        public string typePreferredLanguagePrefKey => $"{LocalizationConstants.LANGUAGE_KEY_PREFIX}{typeof(T).Name}";
+        
+        public T selectedLanguage
         {
             get
             {
@@ -37,54 +38,61 @@ namespace DreadScripts.Localization
         }
   
         #region Instancing
-        public static LocalizationHandler Load(LocalizationScriptableBase map) => new LocalizationHandler(map);
-        public static LocalizationHandler Load<T>(string baseLanguageName = "English") where T : LocalizationScriptableBase => new LocalizationHandler(typeof(T), baseLanguageName);
-        public static LocalizationHandler Load(Type type, string baseLanguageName = "English") => new LocalizationHandler(type, baseLanguageName);
-        public LocalizationHandler(LocalizationScriptableBase map) => SetLanguage(map, false);
+
+        public static LocalizationHandler<T> CreateFromLanguages(params T[] languages) => new LocalizationHandler<T>(false, "English", languages);
+        public static LocalizationHandler<T> CreateFromLanguages(string defaultLanguageName, params T[] languages) => new LocalizationHandler<T>(false, defaultLanguageName, languages);
+        public static LocalizationHandler<T> LoadLanguagesFromAssets(params T[] additionalLanguages) => new LocalizationHandler<T>(true, "English", additionalLanguages);
+        public static LocalizationHandler<T> LoadLanguagesFromAssets(string defaultLanguageName, params T[] additionalLanguages) => new LocalizationHandler<T>(true, defaultLanguageName, additionalLanguages);
         
-        public LocalizationHandler(Type type, string baseLanguageName = "English")
+        private LocalizationHandler(bool loadFromAssets, string defaultLanguageName, params T[] builtinLanguages)
         {
-            if (!typeof(LocalizationScriptableBase).IsAssignableFrom(type))
-                throw new ArgumentException($"Type {type.Name} doesn't inherit from {nameof(LocalizationScriptableBase)}");
-            
-            // This works but is slow.
-            // var allLanguages = AssetDatabase.FindAssets($"t:{type.Name}").Select(AssetDatabase.GUIDToAssetPath).Select(AssetDatabase.LoadAssetAtPath<LocalizationScriptableBase>).Where(so => so != null && so.GetType() == type).ToArray();
-            
-            //This is faster but Resource may not be loaded yet if it's in Packages
-            var allLanguages = Resources.FindObjectsOfTypeAll(type) as LocalizationScriptableBase[];
-            
-            if (allLanguages == null || allLanguages.Length == 0)
+            this.loadFromAssets = loadFromAssets;
+            this.builtinLanguages = builtinLanguages ?? Array.Empty<T>();
+            var type = typeof(T);
+
+            T[] allLanguages = null;
+            if (this.loadFromAssets)
             {
-                //Best of both worlds solution
-                //If the resources aren't loaded, do a concentrated search in the package of the type's script and load them.
-                try
+                // This works but is slow.
+                // var allLanguages = AssetDatabase.FindAssets($"t:{type.Name}").Select(AssetDatabase.GUIDToAssetPath).Select(AssetDatabase.LoadAssetAtPath<LocalizationScriptableBase>).Where(so => so != null && so.GetType() == type).ToArray();
+
+                //This is faster but Resource may not be loaded yet if it's in Packages
+                allLanguages = Resources.FindObjectsOfTypeAll<T>();
+
+                if (allLanguages == null || allLanguages.Length == 0)
                 {
-                    var tempInstance = ScriptableObject.CreateInstance(type);
-                    var ms = MonoScript.FromScriptableObject(tempInstance);
-                    Object.DestroyImmediate(tempInstance);
-                    var msPath = AssetDatabase.GetAssetPath(ms);
-                    var packagePath = msPath.Substring(0, msPath.IndexOf('/', msPath.IndexOf('/') + 1));
-                    var guids = AssetDatabase.FindAssets($"t:{type.Name}", new[] {packagePath});
-                    if (guids.Length > 0) allLanguages = guids.Select(AssetDatabase.GUIDToAssetPath).Select(AssetDatabase.LoadAssetAtPath<LocalizationScriptableBase>).Where(so => so != null && so.GetType() == type).ToArray();
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError($"Failed to force load localization files:\n{e}");
+                    //Best of both worlds solution
+                    //If the resources aren't loaded, do a concentrated search in the package of the type's script and load them.
+                    try
+                    {
+                        var tempInstance = ScriptableObject.CreateInstance<T>();
+                        var ms = MonoScript.FromScriptableObject(tempInstance);
+                        Object.DestroyImmediate(tempInstance);
+                        var msPath = AssetDatabase.GetAssetPath(ms);
+                        var packagePath = msPath.Substring(0, msPath.IndexOf('/', msPath.IndexOf('/') + 1));
+                        var guids = AssetDatabase.FindAssets($"t:{type.Name}", new[] {packagePath});
+                        if (guids.Length > 0) allLanguages = guids.Select(AssetDatabase.GUIDToAssetPath).Select(AssetDatabase.LoadAssetAtPath<T>).Where(so => so != null).ToArray();
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError($"Failed to force load localization files:\n{e}");
+                    }
                 }
             }
+
+            if (builtinLanguages != null)
+                allLanguages = allLanguages == null ? builtinLanguages : allLanguages.Concat(builtinLanguages).Distinct().ToArray();
             
             if (allLanguages == null || allLanguages.Length == 0)
             {
-                Debug.LogError($"No localization files of type {type.Name} found");
+                Debug.LogError($"No localization languages of type {type.Name} found");
                 SetLanguage(null, false);
                 return;
             }
             
-           
-        
             //Tries to load product specific lannguage first, then preferred language, then base language
             
-            LocalizationScriptableBase map = null;
+            T map = null;
             var prefKey = $"{LocalizationConstants.LANGUAGE_KEY_PREFIX}{type.Name}";
             if (EditorPrefs.HasKey(prefKey))
             {
@@ -96,7 +104,7 @@ namespace DreadScripts.Localization
                 map = allLanguages.FirstOrDefault(m => m.languageName == EditorPrefs.GetString(LocalizationConstants.PREFERRED_LANGUAGE_KEY));
             
             if (map == null) 
-                map = allLanguages.FirstOrDefault(m => m.languageName == baseLanguageName);
+                map = allLanguages.FirstOrDefault(m => m.languageName == defaultLanguageName);
             
             if (map == null) map = allLanguages.First();
             SetLanguage(map, false);
@@ -159,11 +167,6 @@ namespace DreadScripts.Localization
         internal MiniContent Get_Internal(string keyName)
         {
             if (localizationMap == null) return null;
-            if (!mapToLocalizationCache.TryGetValue(localizationMap, out var localizationCache))
-            {
-                localizationCache = new Dictionary<string, int>();
-                mapToLocalizationCache.Add(localizationMap, localizationCache);
-            }
             var localizedContent = localizationMap.localizedContent;
             if (!(localizationCache.TryGetValue(keyName, out var index)))
             {
@@ -178,32 +181,25 @@ namespace DreadScripts.Localization
         #region Language
         internal void SetLanguage(object userData)
         {
-            LocalizationScriptableBase map = userData as LocalizationScriptableBase;
-            if (map != null) SetLanguage(map);
+            T map = userData as T;
+            if (map != null) SetLanguage(map, true);
         }
         
-        public void SetLanguage(LocalizationScriptableBase map, bool setAsTypePreferred = true)
+        public void SetLanguage(T map, bool setAsTypePreferred)
         {
             bool changed = localizationMap != map;
             localizationMap = map;
-            localizationType = map != null ? map.GetType() : null;
-            if (setAsTypePreferred) SetCurrentMapAsTypePrefferedLanguage();
-            RefreshLanguages();
+            if (setAsTypePreferred) 
+                SetCurrentMapAsTypePrefferedLanguage();
+            RefreshLanguageOptions();
             if (map != null) selectedLanguageIndex = Array.FindIndex(languageOptions, l => l == map);
             if (changed) onLanguageChanged?.Invoke();
         }
 
         /// <summary>Refreshes the options for the language selection dropdown</summary>
-        public void RefreshLanguages()
+        public void RefreshLanguageOptions()
         {
-            if (localizationType == null)
-            {
-                languageOptions = Array.Empty<LocalizationScriptableBase>();
-                languageOptionsNames = Array.Empty<string>();
-                return;
-            }
-            
-            languageOptions = Resources.FindObjectsOfTypeAll(localizationType).Cast<LocalizationScriptableBase>().OrderBy(sb => sb.languageName).ToArray();
+            languageOptions = loadFromAssets ? Resources.FindObjectsOfTypeAll<T>().Concat(builtinLanguages).OrderBy(sb => sb.languageName).ToArray() : builtinLanguages;
             languageOptionsNames = languageOptions.Select(l => string.IsNullOrWhiteSpace(l.languageName) ? "Unnamed" : l.languageName).ToArray();
             shouldRefresh = false;
         }
@@ -300,7 +296,7 @@ namespace DreadScripts.Localization
         {
             //Refresh the languages when the dropdown for languages gets hovered over.
             if (OnHoverEnter(rect, ref shouldRefresh))
-                RefreshLanguages();
+                RefreshLanguageOptions();
             
             if (localizationMap != null && OnContextClick(rect))
             {
@@ -348,11 +344,8 @@ namespace DreadScripts.Localization
         }
         public void SetTypePrefferedLanguage(string languageName)
         {
-            if (localizationType != null)
-            {
-                EditorPrefs.SetString(typePreferredLanguagePrefKey, languageName);
-                hasSelectedALanguage = true;
-            }
+            EditorPrefs.SetString(typePreferredLanguagePrefKey, languageName);
+            hasSelectedALanguage = true;
         }
         #endregion
     }

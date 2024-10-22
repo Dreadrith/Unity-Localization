@@ -9,8 +9,8 @@ namespace DreadScripts.Localization
 {
     public static class LocalizationHelper
     {
-        private static LocalizationHandler _localizationLocalizationHandler;
-        internal static LocalizationHandler localizationLocalizationHandler => _localizationLocalizationHandler ?? (_localizationLocalizationHandler = new LocalizationHandler(typeof(LocalizationLocalization)));
+        private static LocalizationHandler<LocalizationLocalization> _localizationLocalizationHandler;
+        internal static LocalizationHandler<LocalizationLocalization> localizationLocalizationHandler => _localizationLocalizationHandler ?? (_localizationLocalizationHandler = LocalizationHandler<LocalizationLocalization>.LoadLanguagesFromAssets());
         public static readonly GUIContent addTranslationIcon = new GUIContent(EditorGUIUtility.IconContent("d_ol_plus")){tooltip = "Add Translation"};
         public static readonly GUIContent popoutIcon = new GUIContent(EditorGUIUtility.IconContent("ScaleTool")) {tooltip = "Popout"};
         public static readonly GUIContent helpIcon = new GUIContent(EditorGUIUtility.IconContent("_Help")) {tooltip = "Help"};
