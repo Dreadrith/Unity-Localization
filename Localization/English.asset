@@ -169,4 +169,4 @@ MonoBehaviour:
   - keyName: PopoutAutoClose
     content:
       text: Close when unfocused
-      tooltip: Window will auto-closed when anything else gets focused.
+      tooltip: Window will auto-close when anything else gets focused.

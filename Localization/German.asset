@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a74cd046faed01940be558b7203051dc, type: 3}
-  m_Name: Deutsch
+  m_Name: German
   m_EditorClassIdentifier: 
   languageName: Deutsch
   localizedContent:
@@ -21,34 +21,33 @@ MonoBehaviour:
   - keyName: LanguageNameField
     content:
       text: Sprachname
-      tooltip: "Name der Sprache. Dies erscheint im Dropdown-Men\xFC der Sprachen."
+      tooltip: Name der Sprache. Dies erscheint in der Dropdown-Liste der Sprachen.
   - keyName: SearchField
     content:
-      text: Suche
-      tooltip: "Filtert die Schl\xFCssel, sodass nur diejenigen angezeigt werden,
-        die diesen Text enthalten."
+      text: Suchen
+      tooltip: "Filtert die Schl\xFCssel nach denen, die diesen Text enthalten."
   - keyName: HowToUseFoldout
     content:
-      text: Wie benutzt man es?
+      text: Wie benutzt man das?
       tooltip: 
   - keyName: ShowKeyNameToggle
     content:
       text: "Schl\xFCsselnamen anzeigen"
-      tooltip: "F\xFCr die Spalte Schl\xFCsselname."
+      tooltip: "F\xFCr die Schl\xFCsselnamen-Spalte."
   - keyName: ShowComparisonToggle
     content:
       text: Vergleich anzeigen
-      tooltip: "Vergleiche mit einer anderen Sprache, um das \xDCbersetzen zu erleichtern."
+      tooltip: "Mit einer anderen Sprache vergleichen, um das \xDCbersetzen zu erleichtern."
   - keyName: ShowDisplayToggle
     content:
       text: Endanzeige anzeigen
-      tooltip: Hier wird angezeigt, wie der Inhalt im Editor aussehen wird.
+      tooltip: Zeigt an, wie der Inhalt in den Editoren aussehen wird.
   - keyName: HowToUse
     content:
       text: "Dies ist eine \xDCbersetzungsdatei f\xFCr das zugeh\xF6rige Skript.\nSie
-        k\xF6nnen Ihre \xDCbersetzung in der '\xDCbersetzung'-Spalte eingeben.\nSie
-        k\xF6nnen eine Sprache ausw\xE4hlen, mit der Sie den Vergleich f\xFCr eine
-        einfachere \xDCbersetzung durchf\xFChren m\xF6chten."
+        k\xF6nnen Ihre \xDCbersetzung in der Spalte '\xDCbersetzung' schreiben.\nSie
+        k\xF6nnen eine Sprache zum Vergleichen ausw\xE4hlen, um die \xDCbersetzung
+        zu erleichtern."
       tooltip: 
   - keyName: ComparisonField
     content:
@@ -88,9 +87,9 @@ MonoBehaviour:
       tooltip: 
   - keyName: BaseLocalizationSelectionHelp
     content:
-      text: "W\xE4hlen Sie aus, f\xFCr welche Klasse Sie eine \xDCbersetzung erstellen
-        m\xF6chten.\nWenn Sie Ihre Klasse hier nicht sehen, stellen Sie sicher, dass
-        sie von 'LocalizationScriptableBase' erbt."
+      text: "W\xE4hlen Sie aus, was Sie \xFCbersetzen m\xF6chten.\nWenn Sie Ihre
+        Klasse hier nicht sehen, stellen Sie sicher, dass sie von 'LocalizationScriptableBase'
+        erbt."
       tooltip: 
   - keyName: BaseLocalizationSelectionField
     content:
@@ -98,19 +97,19 @@ MonoBehaviour:
       tooltip: 
   - keyName: ExtrasFoldout
     content:
-      text: Editor-Dienstprogramm
+      text: Editor-Werkzeuge
       tooltip: 
   - keyName: ShowIconToggle
     content:
       text: Symbolfeld anzeigen
-      tooltip: "Dieses Symbol wird \xFCber EditorGUIUtility.IconContent geladen."
+      tooltip: Dieses Symbol wird durch EditorGUIUtility.IconContent geladen
   - keyName: HelpIcon
     content:
       text: 
       tooltip: "Dies ist eine \xDCbersetzungsdatei f\xFCr das zugeh\xF6rige Skript.\nSie
-        k\xF6nnen Ihre \xDCbersetzung in der '\xDCbersetzung'-Spalte eingeben.\nSie
-        k\xF6nnen eine Sprache ausw\xE4hlen, mit der Sie den Vergleich f\xFCr eine
-        einfachere \xDCbersetzung durchf\xFChren m\xF6chten."
+        k\xF6nnen Ihre \xDCbersetzung in der Spalte '\xDCbersetzung' schreiben.\nSie
+        k\xF6nnen eine Sprache zum Vergleichen ausw\xE4hlen, um die \xDCbersetzung
+        zu erleichtern."
   - keyName: Copy
     content:
       text: Kopieren
@@ -121,7 +120,7 @@ MonoBehaviour:
       tooltip: 
   - keyName: LineParseFailLog
     content:
-      text: "Zeile {0} konnte nicht analysiert werden und wurde \xFCbersprungen."
+      text: "Zeile {0} konnte nicht geparst werden und wurde \xFCbersprungen."
       tooltip: 
   - keyName: KeyNotFoundLog
     content:
@@ -130,7 +129,7 @@ MonoBehaviour:
       tooltip: 
   - keyName: CSVPasteFinishLog
     content:
-      text: "Fertig mit dem Einf\xFCgen in die Lokalisierungsdatei."
+      text: "Einf\xFCgen in Lokalisierungsdatei abgeschlossen."
       tooltip: 
   - keyName: CopyCategory
     content:
@@ -142,9 +141,27 @@ MonoBehaviour:
       tooltip: 
   - keyName: CopyAll
     content:
-      text: Alle als CSV kopieren
+      text: Alles als CSV kopieren
       tooltip: 
   - keyName: PasteAll
     content:
-      text: "Alle als CSV einf\xFCgen"
+      text: "Alles als CSV einf\xFCgen"
       tooltip: 
+  - keyName: PreferredLanguageMenuItem
+    content:
+      text: Setze {0} als bevorzugte Sprache
+      tooltip: 
+  - keyName: PreferredLanguageSetLog
+    content:
+      text: Bevorzugte Sprache auf {0} gesetzt. Dies wird als Standardsprache verwendet,
+        wenn keine spezifische Sprache festgelegt ist.
+      tooltip: 
+  - keyName: MissingContent
+    content:
+      text: '[Fehlender Inhalt]'
+      tooltip: Dieser Inhalt fehlt in der Lokalisierungsdatei.
+  - keyName: PopoutAutoClose
+    content:
+      text: "Bei Fokusverlust schlie\xDFen"
+      tooltip: "Fenster schlie\xDFt sich automatisch, wenn etwas anderes fokussiert
+        wird."

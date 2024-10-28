@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a74cd046faed01940be558b7203051dc, type: 3}
-  m_Name: "Espa\xF1ola"
+  m_Name: Spanish
   m_EditorClassIdentifier: 
   languageName: "Espa\xF1ol"
   localizedContent:
@@ -26,7 +26,7 @@ MonoBehaviour:
   - keyName: SearchField
     content:
       text: Buscar
-      tooltip: Filtra las claves para solo aquellas que contienen este texto.
+      tooltip: Filtra las Claves para mostrar solo las que contienen este texto.
   - keyName: HowToUseFoldout
     content:
       text: "\xBFC\xF3mo Usar?"
@@ -34,7 +34,7 @@ MonoBehaviour:
   - keyName: ShowKeyNameToggle
     content:
       text: Mostrar Nombres de Claves
-      tooltip: Para la columna de Nombre de Clave.
+      tooltip: Para la columna de Nombres de Claves.
   - keyName: ShowComparisonToggle
     content:
       text: "Mostrar Comparaci\xF3n"
@@ -45,8 +45,8 @@ MonoBehaviour:
       tooltip: "Esto muestra c\xF3mo se ver\xE1 el contenido en los editores."
   - keyName: HowToUse
     content:
-      text: "Este es un archivo de traducci\xF3n para el script asociado.\nPuedes
-        escribir tu traducci\xF3n en la columna 'Traducci\xF3n'.\nPuedes elegir un
+      text: "Este es un archivo de traducci\xF3n para el script asociado.\nPuede
+        escribir su traducci\xF3n en la columna 'Traducci\xF3n'.\nPuede elegir un
         idioma para comparar y facilitar la traducci\xF3n."
       tooltip: 
   - keyName: ComparisonField
@@ -71,15 +71,15 @@ MonoBehaviour:
       tooltip: 
   - keyName: TranslationTextField
     content:
-      text: texto
+      text: Texto
       tooltip: 
   - keyName: TranslationTooltipField
     content:
-      text: "informaci\xF3n sobre herramientas"
+      text: "Descripci\xF3n Emergente"
       tooltip: 
   - keyName: TranslationIconField
     content:
-      text: icono
+      text: Icono
       tooltip: 
   - keyName: BaseLocalizationTitle
     content:
@@ -87,8 +87,8 @@ MonoBehaviour:
       tooltip: 
   - keyName: BaseLocalizationSelectionHelp
     content:
-      text: "Selecciona para qu\xE9 quieres hacer una traducci\xF3n.\nSi no ves tu
-        clase aqu\xED, aseg\xFArate de que herede de 'LocalizationScriptableBase'."
+      text: "Seleccione lo que desea traducir.\nSi no ve su clase aqu\xED, aseg\xFArese
+        de que hereda de 'LocalizationScriptableBase'."
       tooltip: 
   - keyName: BaseLocalizationSelectionField
     content:
@@ -101,46 +101,64 @@ MonoBehaviour:
   - keyName: ShowIconToggle
     content:
       text: Mostrar Campo de Icono
-      tooltip: "Este icono se carga a trav\xE9s de EditorGUIUtility.IconContent"
+      tooltip: "Este Icono se carga a trav\xE9s de EditorGUIUtility.IconContent"
   - keyName: HelpIcon
     content:
       text: 
-      tooltip: "Este es un archivo de traducci\xF3n para el script asociado.\nPuedes
-        escribir tu traducci\xF3n en la columna 'Traducci\xF3n'.\nPuedes elegir un
+      tooltip: "Este es un archivo de traducci\xF3n para el script asociado.\nPuede
+        escribir su traducci\xF3n en la columna 'Traducci\xF3n'.\nPuede elegir un
         idioma para comparar y facilitar la traducci\xF3n."
   - keyName: Copy
     content:
-      text: Copy
+      text: Copiar
       tooltip: 
   - keyName: Paste
     content:
-      text: Paste
+      text: Pegar
       tooltip: 
   - keyName: LineParseFailLog
     content:
-      text: Line {0} couldn't be parsed and was skipped.
+      text: "La l\xEDnea {0} no se pudo analizar y fue omitida."
       tooltip: 
   - keyName: KeyNotFoundLog
     content:
-      text: Key {0} does not exist in any key collection and was skipped.
+      text: "La clave {0} no existe en ninguna colecci\xF3n de claves y fue omitida."
       tooltip: 
   - keyName: CSVPasteFinishLog
     content:
-      text: Finished pasting to Localization file.
+      text: "Finalizado el pegado al archivo de Localizaci\xF3n."
       tooltip: 
   - keyName: CopyCategory
     content:
-      text: Copy Category As CSV
+      text: "Copiar Categor\xEDa Como CSV"
       tooltip: 
   - keyName: PasteCategory
     content:
-      text: Paste Category As CSV
+      text: "Pegar Categor\xEDa Como CSV"
       tooltip: 
   - keyName: CopyAll
     content:
-      text: Copy All As CSV
+      text: Copiar Todo Como CSV
       tooltip: 
   - keyName: PasteAll
     content:
-      text: Paste All As CSV
+      text: Pegar Todo Como CSV
       tooltip: 
+  - keyName: PreferredLanguageMenuItem
+    content:
+      text: Establecer {0} como idioma preferido
+      tooltip: 
+  - keyName: PreferredLanguageSetLog
+    content:
+      text: "Idioma preferido establecido a {0}. Este intentar\xE1 ser el idioma
+        predeterminado si no se establece un idioma espec\xEDfico."
+      tooltip: 
+  - keyName: MissingContent
+    content:
+      text: '[Contenido Faltante]'
+      tooltip: "Este contenido falta en el archivo de localizaci\xF3n."
+  - keyName: PopoutAutoClose
+    content:
+      text: Cerrar al perder el foco
+      tooltip: "La ventana se cerrar\xE1 autom\xE1ticamente cuando cualquier otra
+        cosa obtenga el foco."

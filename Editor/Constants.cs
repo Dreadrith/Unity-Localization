@@ -125,7 +125,8 @@ namespace DreadScripts.Localization
 			{"ລາວ", "ພາສາ"},						// Lao
 			{"ქართული", "ენა"},					// Georgian
 			{"한국어", "언어"},					// Korean
-			{"中文", "语言"},					// Chinese
+			{"简体中文", "语言"},					// Chinese-Simplified
+			{"繁體中文", "語言"},					// Chinese-Traditional
 			{"日本語", "言語"}					// Japanese
 		};
 	}

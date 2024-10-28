@@ -222,10 +222,19 @@ namespace DreadScripts.Localization
             
             if (languageOptions == null)
             {
-                var cultures = CultureInfo.GetCultures(CultureTypes.NeutralCultures).Skip(1).OrderBy(c => c.EnglishName).ToArray();
+                var cultures = 
+                    CultureInfo.GetCultures(CultureTypes.NeutralCultures).Skip(1)
+                               .Where(c => !c.EnglishName.StartsWith("Chinese"))
+                               .Select(c => new MiniCultureInfo(c))
+                               .Union(new MiniCultureInfo[]
+                               {
+                                   new MiniCultureInfo("Chinese-Simplified","简体中文"),
+                                   new MiniCultureInfo("Chinese-Traditional","繁體中文")
+                               })
+                               .OrderBy(c => c.englishName).ToArray();
                 
-                languageOptions = cultures.Select(c => $"{c.EnglishName} ({c.TextInfo.ToTitleCase(c.NativeName)})").Prepend("[Custom]").ToArray();
-                languageIdentifiers = cultures.Select(c => c.TextInfo.ToTitleCase(c.NativeName)).ToArray();
+                languageOptions = cultures.Select(c => c.displayName).Prepend("[Custom]").ToArray();
+                languageIdentifiers = cultures.Select(c => c.nativeName).ToArray();
             }
             languageOptionIndex = Array.IndexOf(languageIdentifiers, targetScriptable.languageName);
             if (languageOptionIndex == -1) languageOptionIndex = 0;
