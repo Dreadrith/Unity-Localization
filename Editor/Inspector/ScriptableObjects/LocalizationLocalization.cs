@@ -38,6 +38,7 @@ namespace DreadScripts.Localization
         PasteCategory,
         CopyAll,
         PasteAll,
+        CleanUpKeys,
         PreferredLanguageMenuItem,
         PopoutAutoClose
     }

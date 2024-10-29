@@ -100,6 +100,13 @@ namespace DreadScripts.Localization
                         if (GUILayout.Button(Localize(LocalizationLocalizationKeys.PasteAll), EditorStyles.toolbarButton))
                             PasteAsCSV(false);
                     }
+
+                    using (new GUILayout.HorizontalScope())
+                    {
+                        GUILayout.Space(20);
+                        if (GUILayout.Button(Localize(LocalizationLocalizationKeys.CleanUpKeys), EditorStyles.toolbarButton))
+                            CleanUpKeys();
+                    }
                     
                     EditorGUILayout.Space();
 
@@ -523,6 +530,15 @@ namespace DreadScripts.Localization
             Repaint();
         }
         
+        private void CleanUpKeys()
+        {
+            HashSet<string> keys = new HashSet<string>(keyMatches1D.Select(km => km.keyName));
+            Undo.RecordObject(targetScriptable, "Clean Up Keys");
+            targetScriptable.localizedContent = targetScriptable.localizedContent.Where(lc => keys.Contains(lc.keyName)).ToArray();
+            EditorUtility.SetDirty(targetScriptable);
+            RefreshKeyMatches();
+            Repaint();
+        }
         #endregion
 
         
