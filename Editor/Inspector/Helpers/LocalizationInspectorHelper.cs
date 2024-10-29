@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
+using static DreadScripts.Localization.LocalizationMainHelper;
 
 namespace DreadScripts.Localization
 {
-    public static class LocalizationHelper
+    public static class LocalizationInspectorHelper
     {
         private static LocalizationHandler<LocalizationLocalization> _localizationLocalizationHandler;
         internal static LocalizationHandler<LocalizationLocalization> localizationLocalizationHandler => _localizationLocalizationHandler ?? (_localizationLocalizationHandler = LocalizationHandler<LocalizationLocalization>.LoadLanguagesFromAssets());
@@ -16,7 +17,6 @@ namespace DreadScripts.Localization
         public static readonly GUIContent helpIcon = new GUIContent(EditorGUIUtility.IconContent("_Help")) {tooltip = "Help"};
         
         private static readonly GUIContent fallbackMissingContent = new GUIContent("[Missing Content]", "This content is missing from the localization file");
-        private static readonly GUIContent _tempContent = new GUIContent();
 
         public static T ReadyWindow<T>(string title) where T : EditorWindow
         {
@@ -26,19 +26,6 @@ namespace DreadScripts.Localization
             return window;
         }
         
-        public static GUIContent TempContent(string text, string tooltip = "", Texture2D icon = null)
-        {
-            _tempContent.text = text;
-            _tempContent.tooltip = tooltip;
-            _tempContent.image = icon;
-            return _tempContent;
-        }
-
-        public static GUIContent GetMissingContent() => Localize(LocalizationLogsAndErrorsKeys.MissingContent, fallbackMissingContent);
-        
-        internal static GUIContent Localize(LocalizationLocalizationKeys value, GUIContent fallbackContent = null, Texture2D icon = null) => localizationLocalizationHandler.Get(value, fallbackContent, icon);
-        internal static GUIContent Localize(LocalizationLogsAndErrorsKeys value, GUIContent fallbackContent = null, Texture2D icon = null) => localizationLocalizationHandler.Get(value, fallbackContent, icon);
-
         public static void DrawSeparator()
         {
             int thickness = 2;
@@ -51,38 +38,6 @@ namespace DreadScripts.Localization
             ColorUtility.TryParseHtmlString(EditorGUIUtility.isProSkin ? "#595959" : "#858585", out Color lineColor);
             EditorGUI.DrawRect(r, lineColor);
         }
-
-        public static bool OnHoverEnter(Rect r, ref bool b)
-        {
-            Event e = Event.current;
-            if (!r.Contains(e.mousePosition)) b = true;
-            else if (b) return !(b = false);
-
-            return false;
-        }
-
-        public static bool OnLeftClick(Rect r)
-        {
-            Event e = Event.current;
-            if (e.type == EventType.MouseDown && e.button == 0 && r.Contains(e.mousePosition))
-            {
-                e.Use();
-                return true;
-            }
-            return false;
-        }
-        
-        public static bool OnContextClick(Rect r)
-        {
-            Event e = Event.current;
-            if (e.type == EventType.ContextClick && r.Contains(e.mousePosition))
-            {
-                e.Use();
-                return true;
-            }
-            return false;
-        }
-
         
         public static GUIContent ToGUIContent(this MiniContent mc) => ToGUIContent(mc, (GUIContent)null, null);
         public static GUIContent ToGUIContent(this MiniContent mc, string fallback) => ToGUIContent(mc, TextToContent(fallback), null);
@@ -98,26 +53,10 @@ namespace DreadScripts.Localization
             return content;
         }
         
-        internal static GUIContent TextToContent(string text) => text == null ? null : new GUIContent(text);
-
-        ///<summary>Gets the native word of 'Language' in the given language name. If it doesn't exists, returns false and outs 'Language'.</summary>
-        public static bool TryGetLanguageWordTranslation(string languageName, out string translatedWord)
-        {
-            bool found = LocalizationConstants.LanguageWordTranslationDictionary.TryGetValue(languageName, out translatedWord);
-            if (!found) translatedWord = "Language";
-            return found;
-        }
-
-        public static void SetGlobalPreferredLanguage(LocalizationScriptableBase languageMap)
-        {
-            if (languageMap != null) 
-                SetGlobalPreferredLanguage(languageMap.languageName);
-        }
-        public static void SetGlobalPreferredLanguage(string languageName)
-        {
-            EditorPrefs.SetString(LocalizationConstants.PREFERRED_LANGUAGE_KEY, languageName);
-            Debug.Log($"[Localization] {string.Format(Localize(LocalizationLogsAndErrorsKeys.PreferredLanguageSetLog).text, languageName)}");
-        }
+        public static GUIContent GetMissingContent() => Localize(LocalizationLogsAndErrorsKeys.MissingContent, fallbackMissingContent);
+        internal static GUIContent Localize(LocalizationLocalizationKeys value, GUIContent fallbackContent = null, Texture2D icon = null) => localizationLocalizationHandler.Get(value, fallbackContent, icon);
+        internal static GUIContent Localize(LocalizationLogsAndErrorsKeys value, GUIContent fallbackContent = null, Texture2D icon = null) => localizationLocalizationHandler.Get(value, fallbackContent, icon);
+        
     }
 
     

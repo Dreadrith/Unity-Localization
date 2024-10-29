@@ -56,7 +56,7 @@ namespace DreadScripts.Localization
             this.tooltip = tooltip;
         }
         
-        public static implicit operator GUIContent(MiniContent content) => LocalizationHelper.TempContent(content.text, content.tooltip);
+        public static implicit operator GUIContent(MiniContent content) => LocalizationMainHelper.TempContent(content.text, content.tooltip);
         
     }
 

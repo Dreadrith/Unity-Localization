@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEditor;
 using static DreadScripts.Localization.LocalizationStyles;
-using static DreadScripts.Localization.LocalizationHelper;
+using static DreadScripts.Localization.LocalizationInspectorHelper;
 using static DreadScripts.Localization.LocalizationStringUtility;
 
 namespace DreadScripts.Localization

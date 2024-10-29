@@ -4,8 +4,8 @@ using UnityEditor;
 using System;
 using System.Linq;
 using Object = UnityEngine.Object;
-using static DreadScripts.Localization.LocalizationHelper;
-
+using static DreadScripts.Localization.MouseEvents;
+using static DreadScripts.Localization.LocalizationMainHelper;
 namespace DreadScripts.Localization
 {
 
@@ -44,16 +44,8 @@ namespace DreadScripts.Localization
             T[] allLanguages = null;
             if (this.loadFromAssets)
             {
-                // This works but is slow.
-                // var allLanguages = AssetDatabase.FindAssets($"t:{type.Name}").Select(AssetDatabase.GUIDToAssetPath).Select(AssetDatabase.LoadAssetAtPath<LocalizationScriptableBase>).Where(so => so != null && so.GetType() == type).ToArray();
-
-                //This is faster but Resource may not be loaded yet if it's in Packages
-                allLanguages = Resources.FindObjectsOfTypeAll<T>();
-
-                if (allLanguages == null || allLanguages.Length == 0)
+                if (loadedLocalizationTypes.Add(type))
                 {
-                    //Best of both worlds solution
-                    //If the resources aren't loaded, do a concentrated search in the package of the type's script and load them.
                     try
                     {
                         var tempInstance = ScriptableObject.CreateInstance<T>();
@@ -66,9 +58,14 @@ namespace DreadScripts.Localization
                     }
                     catch (Exception e)
                     {
-                        Debug.LogError($"Failed to force load localization files:\n{e}");
+                        Debug.LogError($"Failed to force load localization files of type '{type.Name}':\n{e}");
                     }
                 }
+
+                var resourceLanguages = Resources.FindObjectsOfTypeAll<T>();
+                if (resourceLanguages != null) allLanguages = allLanguages != null ? 
+                    allLanguages.Concat(resourceLanguages).Distinct().ToArray() : resourceLanguages;
+                //This is faster but Resource may not be loaded yet if it's in Packages
             }
 
             if (builtinLanguages != null)
@@ -298,7 +295,7 @@ namespace DreadScripts.Localization
             if (selectedLanguage != null && OnContextClick(rect))
             {
                 GenericMenu menu = new GenericMenu();
-                menu.AddItem(new GUIContent(string.Format(Localize(LocalizationLocalizationKeys.PreferredLanguageMenuItem).text, selectedLanguage.languageName)), false, () =>
+                menu.AddItem(new GUIContent($"Set {selectedLanguage.languageName} as globally preferred language."), false, () =>
                 {
                     SetGlobalPreferredLanguage(selectedLanguage.languageName);
                 });
