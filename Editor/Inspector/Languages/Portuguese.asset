@@ -1,0 +1,141 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a74cd046faed01940be558b7203051dc, type: 3}
+  m_Name: Portuguese
+  m_EditorClassIdentifier: 
+  languageName: "Portugu\xEAs"
+  localizedContent:
+  - keyName: EditorLanguageSelectionField
+    content:
+      text: Idioma do Editor
+      tooltip: "Idioma do editor de localiza\xE7\xE3o."
+  - keyName: LanguageNameField
+    content:
+      text: Nome do Idioma
+      tooltip: "Nome do idioma. Isso \xE9 o que aparece no menu suspenso de idiomas."
+  - keyName: SearchField
+    content:
+      text: Pesquisar
+      tooltip: "Filtra as Chaves para mostrar apenas as que cont\xEAm este texto."
+  - keyName: ShowKeyNameToggle
+    content:
+      text: Mostrar Nomes das Chaves
+      tooltip: Para a coluna Nome da Chave.
+  - keyName: ShowComparisonToggle
+    content:
+      text: "Mostrar Compara\xE7\xE3o"
+      tooltip: "Compare com outro idioma para facilitar a tradu\xE7\xE3o."
+  - keyName: ShowDisplayToggle
+    content:
+      text: "Mostrar Exibi\xE7\xE3o Final"
+      tooltip: "Isso mostra como o conte\xFAdo aparecer\xE1 nos editores."
+  - keyName: ComparisonField
+    content:
+      text: "Idioma de Compara\xE7\xE3o"
+      tooltip: 
+  - keyName: KeyNameTitle
+    content:
+      text: Nomes
+      tooltip: 
+  - keyName: TranslationTitle
+    content:
+      text: "Tradu\xE7\xE3o"
+      tooltip: 
+  - keyName: ComparisonTitle
+    content:
+      text: "Compara\xE7\xE3o"
+      tooltip: 
+  - keyName: DisplayTitle
+    content:
+      text: "Exibi\xE7\xE3o Final"
+      tooltip: 
+  - keyName: TranslationTextField
+    content:
+      text: Texto
+      tooltip: 
+  - keyName: TranslationTooltipField
+    content:
+      text: Dica
+      tooltip: 
+  - keyName: BaseLocalizationTitle
+    content:
+      text: "Localiza\xE7\xE3o"
+      tooltip: 
+  - keyName: BaseLocalizationSelectionHelp
+    content:
+      text: "Selecione o que voc\xEA deseja traduzir.\nSe voc\xEA n\xE3o ver sua
+        classe aqui, certifique-se que ela herda de 'LocalizationScriptableBase'."
+      tooltip: 
+  - keyName: BaseLocalizationSelectionField
+    content:
+      text: Classe Para Traduzir
+      tooltip: 
+  - keyName: ExtrasFoldout
+    content:
+      text: "Utilit\xE1rio do Editor"
+      tooltip: 
+  - keyName: HelpIcon
+    content:
+      text: 
+      tooltip: "Este \xE9 um arquivo de tradu\xE7\xE3o para o script associado.\nVoc\xEA
+        pode escrever sua tradu\xE7\xE3o na coluna 'Tradu\xE7\xE3o'.\nVoc\xEA pode
+        escolher um idioma para comparar e facilitar a tradu\xE7\xE3o."
+  - keyName: LineParseFailLog
+    content:
+      text: "A linha {0} n\xE3o p\xF4de ser analisada e foi ignorada."
+      tooltip: 
+  - keyName: KeyNotFoundLog
+    content:
+      text: "A chave {0} n\xE3o existe em nenhuma cole\xE7\xE3o de chaves e foi ignorada."
+      tooltip: 
+  - keyName: CSVPasteFinishLog
+    content:
+      text: "Conclu\xEDda a colagem no arquivo de Localiza\xE7\xE3o."
+      tooltip: 
+  - keyName: CopyCategory
+    content:
+      text: Copiar Categoria Como CSV
+      tooltip: 
+  - keyName: PasteCategory
+    content:
+      text: Colar Categoria Como CSV
+      tooltip: 
+  - keyName: CopyAll
+    content:
+      text: Copiar Tudo Como CSV
+      tooltip: 
+  - keyName: PasteAll
+    content:
+      text: Colar Tudo Como CSV
+      tooltip: 
+  - keyName: PreferredLanguageMenuItem
+    content:
+      text: Definir {0} como idioma preferido
+      tooltip: 
+  - keyName: PreferredLanguageSetLog
+    content:
+      text: "Idioma preferido definido como {0}. Este ser\xE1 o idioma padr\xE3o
+        se nenhum idioma espec\xEDfico for definido."
+      tooltip: 
+  - keyName: MissingContent
+    content:
+      text: "[Conte\xFAdo Ausente]"
+      tooltip: "Este conte\xFAdo est\xE1 ausente do arquivo de localiza\xE7\xE3o."
+  - keyName: PopoutAutoClose
+    content:
+      text: Fechar ao perder foco
+      tooltip: "A janela fechar\xE1 automaticamente quando qualquer outra coisa ganhar
+        foco."
+  - keyName: CleanUpKeys
+    content:
+      text: "Limpar Chaves N\xE3o Utilizadas"
+      tooltip: 
