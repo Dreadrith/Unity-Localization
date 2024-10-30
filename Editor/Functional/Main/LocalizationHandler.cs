@@ -65,7 +65,6 @@ namespace DreadScripts.Localization
                 var resourceLanguages = Resources.FindObjectsOfTypeAll<T>();
                 if (resourceLanguages != null) allLanguages = allLanguages != null ? 
                     allLanguages.Concat(resourceLanguages).Distinct().ToArray() : resourceLanguages;
-                //This is faster but Resource may not be loaded yet if it's in Packages
             }
 
             if (builtinLanguages != null)
@@ -197,6 +196,9 @@ namespace DreadScripts.Localization
             languageOptionsNames = languageOptions.Select(l => string.IsNullOrWhiteSpace(l.languageName) ? "Unnamed" : l.languageName).ToArray();
             shouldRefresh = false;
         }
+
+        public void ClearCache() => mapToLocalizationCache.Clear();
+        
         #endregion
 
         #region GUI

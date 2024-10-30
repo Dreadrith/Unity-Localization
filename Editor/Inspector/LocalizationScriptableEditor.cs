@@ -535,6 +535,8 @@ namespace DreadScripts.Localization
             HashSet<string> keys = new HashSet<string>(keyMatches1D.Select(km => km.keyName));
             Undo.RecordObject(targetScriptable, "Clean Up Keys");
             targetScriptable.localizedContent = targetScriptable.localizedContent.Where(lc => keys.Contains(lc.keyName)).ToArray();
+            localizationLocalizationHandler.ClearCache();
+            _targetLocalizationHandler.ClearCache();
             EditorUtility.SetDirty(targetScriptable);
             RefreshKeyMatches();
             Repaint();
