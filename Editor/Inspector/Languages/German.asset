@@ -26,10 +26,6 @@ MonoBehaviour:
     content:
       text: Suchen
       tooltip: "Filtert die Schl\xFCssel nach denen, die diesen Text enthalten."
-  - keyName: HowToUseFoldout
-    content:
-      text: Wie benutzt man das?
-      tooltip: 
   - keyName: ShowKeyNameToggle
     content:
       text: "Schl\xFCsselnamen anzeigen"
@@ -42,13 +38,6 @@ MonoBehaviour:
     content:
       text: Endanzeige anzeigen
       tooltip: Zeigt an, wie der Inhalt in den Editoren aussehen wird.
-  - keyName: HowToUse
-    content:
-      text: "Dies ist eine \xDCbersetzungsdatei f\xFCr das zugeh\xF6rige Skript.\nSie
-        k\xF6nnen Ihre \xDCbersetzung in der Spalte '\xDCbersetzung' schreiben.\nSie
-        k\xF6nnen eine Sprache zum Vergleichen ausw\xE4hlen, um die \xDCbersetzung
-        zu erleichtern."
-      tooltip: 
   - keyName: ComparisonField
     content:
       text: Vergleichssprache
@@ -77,10 +66,6 @@ MonoBehaviour:
     content:
       text: Tooltip
       tooltip: 
-  - keyName: TranslationIconField
-    content:
-      text: Symbol
-      tooltip: 
   - keyName: BaseLocalizationTitle
     content:
       text: Lokalisierung
@@ -99,10 +84,6 @@ MonoBehaviour:
     content:
       text: Editor-Werkzeuge
       tooltip: 
-  - keyName: ShowIconToggle
-    content:
-      text: Symbolfeld anzeigen
-      tooltip: Dieses Symbol wird durch EditorGUIUtility.IconContent geladen
   - keyName: HelpIcon
     content:
       text: 
@@ -110,14 +91,6 @@ MonoBehaviour:
         k\xF6nnen Ihre \xDCbersetzung in der Spalte '\xDCbersetzung' schreiben.\nSie
         k\xF6nnen eine Sprache zum Vergleichen ausw\xE4hlen, um die \xDCbersetzung
         zu erleichtern."
-  - keyName: Copy
-    content:
-      text: Kopieren
-      tooltip: 
-  - keyName: Paste
-    content:
-      text: "Einf\xFCgen"
-      tooltip: 
   - keyName: LineParseFailLog
     content:
       text: "Zeile {0} konnte nicht geparst werden und wurde \xFCbersprungen."
@@ -165,3 +138,7 @@ MonoBehaviour:
       text: "Bei Fokusverlust schlie\xDFen"
       tooltip: "Fenster schlie\xDFt sich automatisch, wenn etwas anderes fokussiert
         wird."
+  - keyName: CleanUpKeys
+    content:
+      text: "Unbenutzte Schl\xFCssel bereinigen"
+      tooltip: 

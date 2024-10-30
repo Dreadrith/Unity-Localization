@@ -27,10 +27,6 @@ MonoBehaviour:
     content:
       text: Cerca
       tooltip: Filtra le chiavi per mostrare solo quelle che contengono questo testo.
-  - keyName: HowToUseFoldout
-    content:
-      text: Come si usa?
-      tooltip: 
   - keyName: ShowKeyNameToggle
     content:
       text: Mostra Nomi Chiave
@@ -43,12 +39,6 @@ MonoBehaviour:
     content:
       text: Mostra Visualizzazione Finale
       tooltip: "Questo mostra come apparir\xE0 il contenuto negli editor."
-  - keyName: HowToUse
-    content:
-      text: "Questo \xE8 un file di traduzione per lo script associato.\nPuoi scrivere
-        la tua traduzione nella colonna 'Traduzione'.\nPuoi scegliere una lingua
-        da confrontare per una traduzione pi\xF9 facile."
-      tooltip: 
   - keyName: ComparisonField
     content:
       text: Lingua di Confronto
@@ -77,10 +67,6 @@ MonoBehaviour:
     content:
       text: Suggerimento
       tooltip: 
-  - keyName: TranslationIconField
-    content:
-      text: Icona
-      tooltip: 
   - keyName: BaseLocalizationTitle
     content:
       text: Localizzazione
@@ -100,24 +86,12 @@ MonoBehaviour:
     content:
       text: "Utilit\xE0 Editor"
       tooltip: 
-  - keyName: ShowIconToggle
-    content:
-      text: Mostra Campo Icona
-      tooltip: Questa icona viene caricata attraverso EditorGUIUtility.IconContent
   - keyName: HelpIcon
     content:
       text: 
       tooltip: "Questo \xE8 un file di traduzione per lo script associato.\nPuoi
         scrivere la tua traduzione nella colonna 'Traduzione'.\nPuoi scegliere una
         lingua da confrontare per una traduzione pi\xF9 facile."
-  - keyName: Copy
-    content:
-      text: Copia
-      tooltip: 
-  - keyName: Paste
-    content:
-      text: Incolla
-      tooltip: 
   - keyName: LineParseFailLog
     content:
       text: "La riga {0} non pu\xF2 essere analizzata ed \xE8 stata saltata."
@@ -165,3 +139,7 @@ MonoBehaviour:
       text: Chiudi quando non in focus
       tooltip: "La finestra si chiuder\xE0 automaticamente quando qualcos'altro ottiene
         il focus."
+  - keyName: CleanUpKeys
+    content:
+      text: Pulisci chiavi inutilizzate
+      tooltip: 

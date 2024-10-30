@@ -27,10 +27,6 @@ MonoBehaviour:
     content:
       text: Buscar
       tooltip: Filtra las Claves para mostrar solo las que contienen este texto.
-  - keyName: HowToUseFoldout
-    content:
-      text: "\xBFC\xF3mo Usar?"
-      tooltip: 
   - keyName: ShowKeyNameToggle
     content:
       text: Mostrar Nombres de Claves
@@ -43,12 +39,6 @@ MonoBehaviour:
     content:
       text: "Mostrar Visualizaci\xF3n Final"
       tooltip: "Esto muestra c\xF3mo se ver\xE1 el contenido en los editores."
-  - keyName: HowToUse
-    content:
-      text: "Este es un archivo de traducci\xF3n para el script asociado.\nPuede
-        escribir su traducci\xF3n en la columna 'Traducci\xF3n'.\nPuede elegir un
-        idioma para comparar y facilitar la traducci\xF3n."
-      tooltip: 
   - keyName: ComparisonField
     content:
       text: "Idioma de Comparaci\xF3n"
@@ -77,10 +67,6 @@ MonoBehaviour:
     content:
       text: "Descripci\xF3n Emergente"
       tooltip: 
-  - keyName: TranslationIconField
-    content:
-      text: Icono
-      tooltip: 
   - keyName: BaseLocalizationTitle
     content:
       text: "Localizaci\xF3n"
@@ -98,24 +84,12 @@ MonoBehaviour:
     content:
       text: Utilidad del Editor
       tooltip: 
-  - keyName: ShowIconToggle
-    content:
-      text: Mostrar Campo de Icono
-      tooltip: "Este Icono se carga a trav\xE9s de EditorGUIUtility.IconContent"
   - keyName: HelpIcon
     content:
       text: 
       tooltip: "Este es un archivo de traducci\xF3n para el script asociado.\nPuede
         escribir su traducci\xF3n en la columna 'Traducci\xF3n'.\nPuede elegir un
         idioma para comparar y facilitar la traducci\xF3n."
-  - keyName: Copy
-    content:
-      text: Copiar
-      tooltip: 
-  - keyName: Paste
-    content:
-      text: Pegar
-      tooltip: 
   - keyName: LineParseFailLog
     content:
       text: "La l\xEDnea {0} no se pudo analizar y fue omitida."
@@ -162,3 +136,7 @@ MonoBehaviour:
       text: Cerrar al perder el foco
       tooltip: "La ventana se cerrar\xE1 autom\xE1ticamente cuando cualquier otra
         cosa obtenga el foco."
+  - keyName: CleanUpKeys
+    content:
+      text: Limpiar claves no utilizadas
+      tooltip: 

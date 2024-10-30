@@ -26,10 +26,6 @@ MonoBehaviour:
     content:
       text: Zoeken
       tooltip: Filtert de sleutels op alleen degene die deze tekst bevatten.
-  - keyName: HowToUseFoldout
-    content:
-      text: Hoe te gebruiken?
-      tooltip: 
   - keyName: ShowKeyNameToggle
     content:
       text: Toon Sleutelnamen
@@ -42,16 +38,6 @@ MonoBehaviour:
     content:
       text: Toon Uiteindelijke Weergave
       tooltip: Dit toont hoe de inhoud eruit zal zien in de editors.
-  - keyName: HowToUse
-    content:
-      text: 'Dit is een vertaalbestand voor het bijbehorende script.
-
-        Je
-        kunt je vertaling schrijven in de ''Vertaling'' kolom.
-
-        Je kunt een
-        taal kiezen om mee te vergelijken voor gemakkelijker vertalen.'
-      tooltip: 
   - keyName: ComparisonField
     content:
       text: Vergelijkingstaal
@@ -80,10 +66,6 @@ MonoBehaviour:
     content:
       text: Tooltip
       tooltip: 
-  - keyName: TranslationIconField
-    content:
-      text: Icoon
-      tooltip: 
   - keyName: BaseLocalizationTitle
     content:
       text: Lokalisatie
@@ -103,10 +85,6 @@ MonoBehaviour:
     content:
       text: Editor Hulpmiddel
       tooltip: 
-  - keyName: ShowIconToggle
-    content:
-      text: Toon Icoon Veld
-      tooltip: Dit icoon wordt geladen via EditorGUIUtility.IconContent
   - keyName: HelpIcon
     content:
       text: 
@@ -117,14 +95,6 @@ MonoBehaviour:
 
         Je kunt een
         taal kiezen om mee te vergelijken voor gemakkelijker vertalen.'
-  - keyName: Copy
-    content:
-      text: "Kopi\xEBren"
-      tooltip: 
-  - keyName: Paste
-    content:
-      text: Plakken
-      tooltip: 
   - keyName: LineParseFailLog
     content:
       text: Regel {0} kon niet worden verwerkt en is overgeslagen.
@@ -170,3 +140,7 @@ MonoBehaviour:
     content:
       text: Sluiten bij verlies van focus
       tooltip: Venster sluit automatisch wanneer iets anders focus krijgt.
+  - keyName: CleanUpKeys
+    content:
+      text: Ongebruikte sleutels opschonen
+      tooltip: 

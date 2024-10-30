@@ -26,10 +26,6 @@ MonoBehaviour:
     content:
       text: Search
       tooltip: Filters the Keys for only the ones that contain this text.
-  - keyName: HowToUseFoldout
-    content:
-      text: How To Use?
-      tooltip: 
   - keyName: ShowKeyNameToggle
     content:
       text: Show Key Names
@@ -42,16 +38,6 @@ MonoBehaviour:
     content:
       text: Show Final Display
       tooltip: This displays how the content will look in the editors.
-  - keyName: HowToUse
-    content:
-      text: 'This is a translation file for the associated script.
-
-        You can
-        write your translation in the ''Translation'' column.
-
-        You can choose
-        a language to compare with for easier translation.'
-      tooltip: 
   - keyName: ComparisonField
     content:
       text: Comparison Language
@@ -80,10 +66,6 @@ MonoBehaviour:
     content:
       text: Tooltip
       tooltip: 
-  - keyName: TranslationIconField
-    content:
-      text: icon
-      tooltip: 
   - keyName: BaseLocalizationTitle
     content:
       text: Localization
@@ -103,10 +85,6 @@ MonoBehaviour:
     content:
       text: Editor Utility
       tooltip: 
-  - keyName: ShowIconToggle
-    content:
-      text: Show Icon Field
-      tooltip: This Icon gets loaded through EditorGUIUtility.IconContent
   - keyName: HelpIcon
     content:
       text: 
@@ -117,14 +95,6 @@ MonoBehaviour:
 
         You can
         choose a language to compare with for easier translation.'
-  - keyName: Copy
-    content:
-      text: Copy
-      tooltip: 
-  - keyName: Paste
-    content:
-      text: Paste
-      tooltip: 
   - keyName: LineParseFailLog
     content:
       text: Line {0} couldn't be parsed and was skipped.
@@ -170,3 +140,7 @@ MonoBehaviour:
     content:
       text: Close when unfocused
       tooltip: Window will auto-close when anything else gets focused.
+  - keyName: CleanUpKeys
+    content:
+      text: Clean Up Unused Keys
+      tooltip: 

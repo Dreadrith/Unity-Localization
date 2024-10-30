@@ -28,10 +28,6 @@ MonoBehaviour:
       text: Rechercher
       tooltip: "Filtre les cl\xE9s pour n'afficher que celles qui contiennent ce
         texte."
-  - keyName: HowToUseFoldout
-    content:
-      text: Comment utiliser ?
-      tooltip: 
   - keyName: ShowKeyNameToggle
     content:
       text: "Afficher les noms des cl\xE9s"
@@ -44,12 +40,6 @@ MonoBehaviour:
     content:
       text: "Afficher l'aper\xE7u final"
       tooltip: "Affiche comment le contenu appara\xEEtra dans les \xE9diteurs."
-  - keyName: HowToUse
-    content:
-      text: "Ceci est un fichier de traduction pour le script associ\xE9.\nVous pouvez
-        \xE9crire votre traduction dans la colonne 'Traduction'.\nVous pouvez choisir
-        une langue \xE0 comparer pour faciliter la traduction."
-      tooltip: 
   - keyName: ComparisonField
     content:
       text: Langue de comparaison
@@ -78,10 +68,6 @@ MonoBehaviour:
     content:
       text: Info-bulle
       tooltip: 
-  - keyName: TranslationIconField
-    content:
-      text: "Ic\xF4ne"
-      tooltip: 
   - keyName: BaseLocalizationTitle
     content:
       text: Localisation
@@ -99,24 +85,12 @@ MonoBehaviour:
     content:
       text: "Utilitaire d'\xE9dition"
       tooltip: 
-  - keyName: ShowIconToggle
-    content:
-      text: "Afficher le champ d'ic\xF4ne"
-      tooltip: "Cette ic\xF4ne est charg\xE9e via EditorGUIUtility.IconContent"
   - keyName: HelpIcon
     content:
       text: 
       tooltip: "Ceci est un fichier de traduction pour le script associ\xE9.\nVous
         pouvez \xE9crire votre traduction dans la colonne 'Traduction'.\nVous pouvez
         choisir une langue \xE0 comparer pour faciliter la traduction."
-  - keyName: Copy
-    content:
-      text: Copier
-      tooltip: 
-  - keyName: Paste
-    content:
-      text: Coller
-      tooltip: 
   - keyName: LineParseFailLog
     content:
       text: "La ligne {0} n'a pas pu \xEAtre analys\xE9e et a \xE9t\xE9 ignor\xE9e."
@@ -164,3 +138,7 @@ MonoBehaviour:
       text: Fermer en cas de perte de focus
       tooltip: "La fen\xEAtre se fermera automatiquement lorsqu'autre chose obtient
         le focus."
+  - keyName: CleanUpKeys
+    content:
+      text: "Nettoyer les cl\xE9s inutilis\xE9es"
+      tooltip: 
