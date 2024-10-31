@@ -101,7 +101,7 @@ namespace DreadScripts.Localization
         #region Get with KeyName
         public bool TryGet(string keyName, out GUIContent content, Texture2D icon = null)
         {
-            var mc = Get_Internal(keyName);
+            var mc = GetMiniContent(keyName);
             bool success = mc != null;
             content = mc.ToGUIContent(null, icon);
             return success;
@@ -116,7 +116,7 @@ namespace DreadScripts.Localization
         
         public GUIContent this[string keyName] => Get(keyName);
         
-        private GUIContent StringGet_Internal(string keyName, GUIContent fallback, Texture2D icon) => Get_Internal(keyName).ToGUIContent(fallback, icon);
+        private GUIContent StringGet_Internal(string keyName, GUIContent fallback, Texture2D icon) => GetMiniContent(keyName).ToGUIContent(fallback, icon);
         #endregion
         
         #region Get with EnumKey
@@ -147,11 +147,11 @@ namespace DreadScripts.Localization
                 key = value.ToString();
                 _globalEnumDictionary.Add(value, key);
             }
-            return Get_Internal(key).ToGUIContent(fallback, icon);
+            return GetMiniContent(key).ToGUIContent(fallback, icon);
         }
         #endregion
         
-        internal MiniContent Get_Internal(string keyName)
+        public MiniContent GetMiniContent(string keyName)
         {
             if (selectedLanguage == null) return null;
             if (!mapToLocalizationCache.TryGetValue(selectedLanguage, out var localizationCache))

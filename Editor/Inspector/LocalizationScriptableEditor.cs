@@ -288,8 +288,8 @@ namespace DreadScripts.Localization
                 for (int j = 0; j < kma.Length; j++)
                 {
                     var k = keyCollections[i].keyNames[j];
-                    var comparisonContent = _comparisonLocalizationHandler.Get_Internal(k);
-                    var targetContent = _targetLocalizationHandler.Get_Internal(k);
+                    var comparisonContent = _comparisonLocalizationHandler.GetMiniContent(k);
+                    var targetContent = _targetLocalizationHandler.GetMiniContent(k);
                     kma[j] = new KeyMatch(k, comparisonContent, targetContent, currentIndex++);
                 }
             }

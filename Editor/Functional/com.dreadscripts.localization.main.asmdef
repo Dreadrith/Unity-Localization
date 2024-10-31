@@ -1,5 +1,5 @@
 {
-    "name": "com.dreadscripts.localization.backup",
+    "name": "com.dreadscripts.localization.main",
     "references": [],
     "includePlatforms": [
         "Editor"
@@ -9,11 +9,13 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "!DREADSCRIPTS_LOCALIZATION"
+    ],
     "versionDefines": [
         {
             "name": "com.dreadscripts.localization",
-            "expression": "",
+            "expression": "9.9.9",
             "define": "DREADSCRIPTS_LOCALIZATION"
         }
     ],

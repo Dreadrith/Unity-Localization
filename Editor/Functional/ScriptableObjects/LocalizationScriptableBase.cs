@@ -14,7 +14,7 @@ namespace DreadScripts.Localization
         public abstract KeyCollection[] keyCollections{ get; }
 
         [SerializeField] public string languageName = "";
-        [SerializeField] internal LocalizedContent[] localizedContent = Array.Empty<LocalizedContent>();
+        [SerializeField] public LocalizedContent[] localizedContent = Array.Empty<LocalizedContent>();
 
         public void PopulateContent(bool canUndo = true)
         {
@@ -27,12 +27,12 @@ namespace DreadScripts.Localization
     }
 
     [Serializable]
-    internal class LocalizedContent
+    public class LocalizedContent
     {
         public string keyName;
         public MiniContent content;
 
-        internal LocalizedContent(string keyName, MiniContent content)
+        public LocalizedContent(string keyName, MiniContent content)
         {
             this.keyName = keyName;
             this.content = content;
