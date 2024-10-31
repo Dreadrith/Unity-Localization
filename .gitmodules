@@ -1,0 +1,6 @@
+[submodule "Editor/Core"]
+	path = Editor/Core
+	url = https://github.com/Dreadrith/Unity-Localization-Core
+[submodule "Editor/Inspector"]
+	path = Editor/Inspector
+	url = https://github.com/Dreadrith/Unity-Localization-Inspector
