@@ -103,7 +103,7 @@ namespace DreadScripts.Localization
         {
             var mc = Get_Internal(keyName);
             bool success = mc != null;
-            content = mc.ToGUIContent(icon);
+            content = mc.ToGUIContent(null, icon);
             return success;
         }
         

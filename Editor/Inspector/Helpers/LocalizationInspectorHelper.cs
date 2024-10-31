@@ -16,7 +16,6 @@ namespace DreadScripts.Localization
         public static readonly GUIContent popoutIcon = new GUIContent(EditorGUIUtility.IconContent("ScaleTool")) {tooltip = "Popout"};
         public static readonly GUIContent helpIcon = new GUIContent(EditorGUIUtility.IconContent("_Help")) {tooltip = "Help"};
         
-        private static readonly GUIContent fallbackMissingContent = new GUIContent("[Missing Content]", "This content is missing from the localization file");
 
         public static T ReadyWindow<T>(string title) where T : EditorWindow
         {
@@ -37,20 +36,6 @@ namespace DreadScripts.Localization
             r.width += 6;
             ColorUtility.TryParseHtmlString(EditorGUIUtility.isProSkin ? "#595959" : "#858585", out Color lineColor);
             EditorGUI.DrawRect(r, lineColor);
-        }
-        
-        public static GUIContent ToGUIContent(this MiniContent mc) => ToGUIContent(mc, (GUIContent)null, null);
-        public static GUIContent ToGUIContent(this MiniContent mc, string fallback) => ToGUIContent(mc, TextToContent(fallback), null);
-        public static GUIContent ToGUIContent(this MiniContent mc, GUIContent fallback) => ToGUIContent(mc, fallback, null);
-        public static GUIContent ToGUIContent(this MiniContent mc, Texture2D icon) => ToGUIContent(mc, (GUIContent)null, icon);
-        public static GUIContent ToGUIContent(this MiniContent mc, string fallback, Texture2D icon) => ToGUIContent(mc, TextToContent(fallback), icon);
-        public static GUIContent ToGUIContent(this MiniContent mc, GUIContent fallback, Texture2D icon)
-        {
-            if (mc == null) return fallback ?? GetMissingContent();
-            
-            GUIContent content = mc;
-            if (!ReferenceEquals(icon, null)) content.image = icon;
-            return content;
         }
         
         public static GUIContent GetMissingContent() => Localize(LocalizationLogsAndErrorsKeys.MissingContent, fallbackMissingContent);
