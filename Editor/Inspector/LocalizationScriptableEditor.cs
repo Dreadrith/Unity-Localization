@@ -382,7 +382,7 @@ namespace DreadScripts.Localization
             if (km.hidden) return;
             var baseRect = GetRect(km);
             DrawBackground(baseRect, km.index);
-            GUI.Label(baseRect, km.targetContent ?? GetMissingContent());
+            GUI.Label(baseRect, km.targetContent?.ToGUIContent() ?? GetMissingContent());
         }
 
         private void HandleFirstColumn(KeyMatch km, ref Rect r)
@@ -417,11 +417,10 @@ namespace DreadScripts.Localization
         private static readonly Color oddColor = new Color(0, 0, 0, 0);
         private static readonly Color evenColor = new Color(0, 0, 0, 0.14f);
 
-        private void DrawBackground(Rect rect, int index) => EditorGUI.DrawRect(rect, index % 2 == 0 ? evenColor : oddColor);
-        private float GetHeight(KeyMatch km) => km.foldout ? EditorGUIUtility.singleLineHeight * 2 /* * (showIconField ? 3 : 2)*/ : EditorGUIUtility.singleLineHeight;
-        private Rect GetRect(KeyMatch km) => EditorGUILayout.GetControlRect(false, GetHeight(km), GUILayout.ExpandWidth(true));
-
-        private bool DrawFoldout(ref bool b, GUIContent label)
+        private static Rect GetRect(KeyMatch km) => EditorGUILayout.GetControlRect(false, GetHeight(km), GUILayout.ExpandWidth(true));
+        private static void DrawBackground(Rect rect, int index) => EditorGUI.DrawRect(rect, index % 2 == 0 ? evenColor : oddColor);
+        private static float GetHeight(KeyMatch km) => km.foldout ? EditorGUIUtility.singleLineHeight * 2 /* * (showIconField ? 3 : 2)*/ : EditorGUIUtility.singleLineHeight;
+        private static bool DrawFoldout(ref bool b, GUIContent label)
         {
             using (new GUILayout.HorizontalScope())
             {
