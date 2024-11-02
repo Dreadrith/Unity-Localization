@@ -1,6 +1,6 @@
 # Unity-Localization
 Unity-Localization is a Library for easy Localization for Unity Scripts. It works by creating different Language files, which you can include in your project for easily localization.
-### [Download or Add to VCC here](https://vpm.dreadscripts.com)
+### [Get it from here](https://vpm.dreadscripts.com)
 <br><img src="https://github.com/user-attachments/assets/637ad79a-b615-49d6-b025-de0a925cf805" width="400" /><br>
 > An example Localization file. This localization is the German Localization for the Unity-Localization script.
 
@@ -182,3 +182,9 @@ This one’s a bit more complicated but we tried making it as easy as possible. 
     </ul>
 </blockquote>
 </details>
+
+### Credits
+Thanks to [jellejurre](https://github.com/jellejurre) for helping with modifying, testing and documenting Unity-Localization
+
+### Thank you
+If you enjoy Unity-Localization, please consider [supporting me ♡](https://ko-fi.com/Dreadrith)!
