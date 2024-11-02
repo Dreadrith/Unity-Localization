@@ -22,7 +22,7 @@ Here is an example of the script.
 ```csharp
 using DreadScripts.Localization;
 namespace DreadScripts.TestScript {
-	public class ExampleLocalizationUsingStrings : LocalizationScriptableBase
+	public class ExampleLocalization : LocalizationScriptableBase
 	{
 		/*          */ public override string hostTitle => "TestScript";
 		/* OPTION 1 */ public override KeyCollection[] keyCollections => new [] { new KeyCollection("ExampleName", "TestKey1", "TestKey2", "TestKey3") };
@@ -57,7 +57,7 @@ If you have multiple collections defined, you can swap between them by clicking 
 In the editor script you want to Localize, Make a new instance of the `LocalizationHandler<T>` class by passing in your Localization Scriptable’s type, like this:
 
 ```csharp
-LocalizationHandler<ExampleLocalizationUsingEnum> handler = new LocalizationHandler<ExampleLocalizationUsingEnum>();
+LocalizationHandler<ExampleLocalization> handler = new LocalizationHandler<ExampleLocalization>();
 ```
 
 Here’s the definition of the constructor:
@@ -107,14 +107,14 @@ namespace DreadScripts.TestScript
 		[MenuItem("Example/Show Example Script")]
 		private static void ShowWindow() => GetWindow<ExampleLanguageScript>();
 		
-		private LocalizationHandler<ExampleLocalizationUsingEnum> handler = new LocalizationHandler<ExampleLocalizationUsingEnum>();
+		private LocalizationHandler<ExampleLocalization> handler = new LocalizationHandler<ExampleLocalization>();
 
 		private void OnGUI()
 		{
 			handler.DrawField();
-			GUILayout.Label(handler[ExampleLocalizationUsingEnums.LocalizationKeys.TestKey1]);
-			GUILayout.Label(handler[ExampleLocalizationUsingEnums.LocalizationKeys.TestKey2]);
-			GUILayout.Label(handler[ExampleLocalizationUsingEnums.LocalizationKeys.TestKey3]);
+			GUILayout.Label(handler[ExampleLocalization.LocalizationKeys.TestKey1]);
+			GUILayout.Label(handler[ExampleLocalization.LocalizationKeys.TestKey2]);
+			GUILayout.Label(handler[ExampleLocalization.LocalizationKeys.TestKey3]);
 		} 
 	}
 }
