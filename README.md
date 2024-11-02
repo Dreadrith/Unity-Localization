@@ -24,9 +24,19 @@ using DreadScripts.Localization;
 namespace DreadScripts.TestScript {
 	public class ExampleLocalization : LocalizationScriptableBase
 	{
-		/*          */ public override string hostTitle => "TestScript";
-		/* OPTION 1 */ public override KeyCollection[] keyCollections => new [] { new KeyCollection("ExampleName", "TestKey1", "TestKey2", "TestKey3") };
-		/* OPTION 2 */ public override KeyCollection[] keyCollections => new [] { new KeyCollection("ExampleName", typeof(LocalizationKeys)) };
+		public override string hostTitle => "TestScript";
+
+		// OPTION 1
+		public override KeyCollection[] keyCollections => new [] { new KeyCollection("ExampleName", "TestKey1", "TestKey2", "TestKey3") };
+
+		// OPTION 2
+		public override KeyCollection[] keyCollections => new [] { new KeyCollection("ExampleName", typeof(LocalizationKeys)) };
+		public enum LocalizationKeys
+		{
+			TestKey1,
+			TestKey2,
+			TestKey3
+		}
 	}
 }
 ```
