@@ -1,14 +1,15 @@
 # Unity-Localization
 Unity-Localization is a library for easy language switching in a Unity Script. It makes it easy for you to make multiple language files for your script to sample from based on language selection.
 ### [Get It Here!](https://vpm.dreadscripts.com)
-<br><img src="https://github.com/user-attachments/assets/637ad79a-b615-49d6-b025-de0a925cf805" width="400" /><br>
-> An example Localization file. This localization is the German Localization for the Unity-Localization script.
+<br><img src="https://github.com/user-attachments/assets/637ad79a-b615-49d6-b025-de0a925cf805" width="400" />
+<img src="https://github.com/user-attachments/assets/54018ee0-6d22-4b5a-a9f9-3fe9d091dfb2" width="400" /><br>
+> An example of the German Localization file and a script utilizing Unity-Localization.
 
 ## Creating the Localization Definition
 To get started, create a new C# script that extends `DreadScripts.Localization.LocalizationScriptableBase` 
 
 If your project is in Packages, you will have to add a reference to the Unity-Localization-Core assembly to your Assembly Definition as shown below. It can be found under `Packages > DreadScripts - Localization > Editor > Core > com.dreadscripts.localization.core.asmdef`.
-<br><br><img src="https://github.com/user-attachments/assets/92215d0d-d90b-4fe6-ab5b-78c70c04ba81" width ="400" /><br>
+<br><br><img src="https://github.com/user-attachments/assets/92215d0d-d90b-4fe6-ab5b-78c70c04ba81" width="400" /><br>
 
 In this C# script, you will have to implement two properties:
 
@@ -64,7 +65,7 @@ If you have multiple collections defined, you can swap between them by clicking 
 
 ### Instancing
 
-In the editor script you want to Localize, Make a new instance of the `LocalizationHandler<T>` class by passing in your Localization Scriptable’s type, like this:
+In the editor script you want to Localize, make a new instance of the `LocalizationHandler<T>` class by passing in your Localization Scriptable’s type, like this:
 
 ```csharp
 LocalizationHandler<ExampleLocalization> handler = new LocalizationHandler<ExampleLocalization>();
@@ -133,16 +134,16 @@ namespace DreadScripts.TestScript
 <img src="https://github.com/user-attachments/assets/cc18d25e-0925-4a2b-88d6-5bb367bcaafb" width="300" />
 <img src="https://github.com/user-attachments/assets/663e5e0e-0a3d-4ffb-b972-603e1e704855" width="300" />
 <br>
-And that’s it! Your script can now be read bymore people! But, it does mean the script depends on Unity-Localization to work…
+And that’s it! Your script can now be read by more people! But, it does mean the script depends on Unity-Localization to work…
 
 ---
 ## Dependency Management
 
-Whether to keep the dependency or not is up to you. Either way should not have any errors or conflicts but has its pros and cons.
+Whether to keep the dependency or not is up to you. Either way should not have any errors or conflicts but has its pros and cons.<br>
 **Keeping the dependency:**<br>
 - Pro: Less clutter in your package.
 - Pro: Polished editor to edit the localization files.
-- Pro: Certain package managers can easily import the localization package along with it
+- Pro: Certain package managers can easily import the localization package along with it.
 - Con: Has to rely on the Unity-Localization package and doesn’t work without it.
 
 **Removing the dependency:**<br>
@@ -153,7 +154,7 @@ Whether to keep the dependency or not is up to you. Either way should not have a
 
 ### Keeping the dependency
 
-If you’re keeping the dependency, open your package’s .json in your text editor of choice, and add `com.dreadscripts.localization` as one of the `vpmDependencies` like so.
+If you’re keeping the dependency, open your package’s .json in your text editor of choice, and add `com.dreadscripts.localization` as one of the `vpmDependencies`, as shown below.
 
 ![image](https://github.com/user-attachments/assets/47beaab2-bb84-4729-bf46-343e9e7d4e8c)
 
@@ -185,9 +186,9 @@ This one’s a bit more complicated but we tried making it as easy as possible. 
   <summary>How the dependency exclusion works</summary>
   <blockquote>
     <ul>
-      <li>We copy over the Core folder because that’s the part responsible for the logic and most things that your script may user. The Inspector folder is for the Custom Editor that Unity-Localization provides to make it easier to make Localization files.</li>
-      <li>The GUIDs MUST be different because otherwise, scriptable objects may reference the wrong script between the original and your package and may cause your package to overwrite the original files of Unity-Localization when importing.</li>
-      <li>You can guarantee that GUIDs are different by NOT including them when copying over the Core folder. If Unity-Localization already exists in the project, Unity will likely automatically regenerate the GUIDs for the copied Core folder. Please be wary of GUIDs not being different if neither of those criteria were met.</li>
+      <li>We copy over the Core folder because that’s the part responsible for the logic and most things that your script may use. The Inspector folder is for the Custom Editor that Unity-Localization provides to make it easier to make Localization files.</li>
+      <li>The GUIDs MUST be different because otherwise scriptable objects may reference the wrong script between the original and your package and may cause your package to overwrite the original files of Unity-Localization when importing.</li>
+      <li>You can ensure GUIDs are different by NOT including them when copying the Core folder. If Unity-Localization already exists in the project, Unity will likely automatically regenerate the GUIDs for the copied Core folder. Please be wary of GUIDs not being different if neither of those criteria were met.</li>
       <li>Asmdef name change is to make it different from the original. An asmdef generates an assembly with that name and no two assemblies may have the same name.</li>
       <li>The Core asmdef is prepped to exclude itself if the definition `DREADSCRIPTS_LOCALIZATION` exists. This definition exists if Unity-Localization package is imported. However, to prevent the original package from its own core by existing, we make the definition have an “always false” condition, hence the `Expression = 9.9.9` field. By clearing this field, the definition may exist if Unity-Localization is imported and exclude the copy from compilation.</li>
     </ul>
