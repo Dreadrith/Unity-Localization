@@ -48,6 +48,7 @@ In here, you can select or fill in the Language name for this language, and for 
 If you already have one or more Localization assets completed, you can compare with them by selecting them in the Comparison Language dropdown. 
 
 If you have multiple collections defined, you can swap between them by clicking their name above the Translation table.
+
 ---
 ## Using the Localization Assets
 
@@ -122,8 +123,8 @@ namespace DreadScripts.TestScript
 <img src="https://github.com/user-attachments/assets/cc18d25e-0925-4a2b-88d6-5bb367bcaafb" width="300" />
 <img src="https://github.com/user-attachments/assets/663e5e0e-0a3d-4ffb-b972-603e1e704855" width="300" />
 <br>
-
 And that’s it! Your script can now be read bymore people! But, it does mean the script depends on Unity-Localization to work…
+
 ---
 ## Dependency Management
 
