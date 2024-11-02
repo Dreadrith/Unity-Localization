@@ -16,7 +16,7 @@ In this C# script, you will have to implement two properties:
 - `keyCollections`, an array of `KeyCollection`, which is a way of categorizing the Localization Keys.
     - KeyCollection has two constructors:
         - `public KeyCollection(string collectionName, params string[] keyNames)`, which means that the first string you pass to the constructor is the category name, and all the other strings are keys to be Localized.
-        - `public LocalizationKeyCategory(string collectionName, Type enumType)`, which means that the string you pass to the constructor is the category name, and for the keys to be Localized you can pass in the type of an Enum. This way, you can make sure that every value you want localized is always covered simply by adding more values to the Enum.
+        - `public KeyCollection(string collectionName, Type enumType)`, which means that the string you pass to the constructor is the category name, and for the keys to be Localized you can pass in the type of an Enum. This way, you can make sure that every value you want localized is always covered simply by adding more values to the Enum.
 
 Here is an example of the script.
 ```csharp
